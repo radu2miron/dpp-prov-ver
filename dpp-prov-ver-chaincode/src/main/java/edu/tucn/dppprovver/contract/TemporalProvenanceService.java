@@ -24,6 +24,8 @@ import org.hyperledger.fabric.contract.Context;
 /** Validates temporal corrections and reconstructs the latest accepted effective-time history. */
 public final class TemporalProvenanceService {
     private static final String CORRECTION_ACTIVE_KEY = "DPP_HISTORICAL_CORRECTIONS_PRESENT";
+    private static final String KNOWN_NEW_ASSET_PREFIX = "TEMPORAL_NEW_ASSET:";
+    private static final String HOSTED_COMPONENT_PREFIX = "TEMPORAL_HAS_HOSTED:";
 
     private final LifecycleEventService events;
     private final AcceptanceDecisionService decisions;
@@ -82,9 +84,19 @@ public final class TemporalProvenanceService {
         return null;
     }
 
-    /** Rejects later structural operations that would contradict the corrected history. */
+    /**
+     * Rejects structural updates that would contradict corrected history.
+     * A never-used component entering a never-used slot cannot affect any
+     * previously accepted structural interval or form a cycle. Only those
+     * provably isolated INSTALLs bypass the global history replay.
+     */
     String validateStructuralEvent(Context ctx, LifecycleEvent candidate) {
         if (!"1".equals(ctx.getStub().getStringState(CORRECTION_ACTIVE_KEY))) return null;
+        // An already-occupied current guard is handled by install(), which
+        // records the structural Conflict. Do not preempt that path with a
+        // historical rejection that lacks a resolvable Conflict record.
+        if (isCurrentlyOccupiedInstall(ctx, candidate)) return null;
+        if (isProvablyIsolatedInstall(ctx, candidate)) return null;
         try {
             List<Entry> entries = acceptedEntries(ctx);
             entries.add(new Entry(candidate));
@@ -93,6 +105,72 @@ public final class TemporalProvenanceService {
             return exception.getMessage();
         }
         return null;
+    }
+
+    /**
+     * Registers assets first created after this optimization is installed.
+     * Assets already on the ledger have no marker, so they always take the
+     * original conservative replay path unless the correction flag is absent.
+     */
+    static void recordNewAsset(Context ctx, String assetId) {
+        ctx.getStub().putStringState(KNOWN_NEW_ASSET_PREFIX + encode(assetId), "1");
+    }
+
+    /**
+     * An accepted INSTALL establishes that its host has contained a child.
+     * This is a blind, idempotent write: concurrent installs in DIFFERENT
+     * slots of the same host need not read or contend on this marker.
+     * A concurrent installation OF that host as a component, however, reads
+     * the marker and will be MVCC-validated against the new hosted relation.
+     */
+    static void recordHostedComponent(Context ctx, String hostId) {
+        ctx.getStub().putStringState(HOSTED_COMPONENT_PREFIX + encode(hostId), "1");
+    }
+
+    /** The current-slot guard has priority over historical replay for INSTALL. */
+    private boolean isCurrentlyOccupiedInstall(Context ctx, LifecycleEvent event) {
+        if (event.getType() != LifecycleEventType.INSTALL || event.getData() == null) return false;
+        String component = event.getData().getComponentId();
+        String host = event.getData().getHostId();
+        String slot = event.getData().getSlotId();
+        if (blank(component) || blank(host) || blank(slot)) return false;
+        return !blank(ctx.getStub().getStringState("ACTIVE_COMPONENT:" + encode(component)))
+                || !blank(ctx.getStub().getStringState(
+                        "ACTIVE_SLOT:" + encode(host) + ":" + encode(slot)));
+    }
+
+    /**
+     * Strictly conservative fast path: both the component and the slot must
+     * have no accepted structural history. The component must also never
+     * have acted as a host, otherwise a retroactive placement could create
+     * a cycle through a previously hosted descendant.
+     *
+     * Point reads protect the proof against racing writers via Fabric MVCC.
+     * The per-component marker is available only for newly created assets;
+     * older assets transparently fall back to the full history replay.
+     */
+    private boolean isProvablyIsolatedInstall(Context ctx, LifecycleEvent event) {
+        if (event.getType() != LifecycleEventType.INSTALL || event.getData() == null) return false;
+        String component = event.getData().getComponentId();
+        String host = event.getData().getHostId();
+        String slot = event.getData().getSlotId();
+        if (blank(component) || blank(host) || blank(slot)) return false;
+        if (!"1".equals(ctx.getStub().getStringState(KNOWN_NEW_ASSET_PREFIX + encode(component)))) {
+            return false;
+        }
+        if (!blank(ctx.getStub().getStringState(HOSTED_COMPONENT_PREFIX + encode(component)))) {
+            return false;
+        }
+        if (!blank(ctx.getStub().getStringState("LAST_COMPONENT_TIME:" + encode(component)))) {
+            return false;
+        }
+        return blank(ctx.getStub().getStringState(
+                "LAST_SLOT_TIME:" + encode(host) + ":" + encode(slot)));
+    }
+
+    private static String encode(String id) {
+        return Base64.getUrlEncoder().withoutPadding()
+                .encodeToString(id.getBytes(StandardCharsets.UTF_8));
     }
 
     /** Updates only the auxiliary latest-correction pointer, preserving both original events. */
@@ -285,8 +363,7 @@ public final class TemporalProvenanceService {
     }
 
     private static String correctionHeadKey(String id) {
-        return "CORRECTION_HEAD:" + Base64.getUrlEncoder().withoutPadding()
-                .encodeToString(id.getBytes(StandardCharsets.UTF_8));
+        return "CORRECTION_HEAD:" + encode(id);
     }
 
     private static boolean blank(String s) { return s == null || s.isBlank(); }

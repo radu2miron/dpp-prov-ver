@@ -1,0 +1,14 @@
+step,scenario,expected_http,observed_http,fabric_status,semantic_outcome,validation_code,elapsed_seconds,assessment,notes
+S01,Health,200,200,,,,,PASS,API health only; Fabric connectivity not checked
+S02,Create actor A,201,201,VALID,,,,PASS,API durationMs=548 (not client elapsed time)
+S03,Create actor B,201,201,VALID,,,,PASS,API durationMs=552 (not client elapsed time)
+S04,Create host,201,201,VALID,,,,PASS,API durationMs=557 (not client elapsed time)
+S05,Create motor A,201,201,VALID,,,,PASS,API durationMs=550 (not client elapsed time)
+S06,Create motor B,201,201,VALID,,,,PASS,API durationMs=550 (not client elapsed time)
+S07,Create DPP,201,201,VALID,,,,PASS,API durationMs=552 (not client elapsed time)
+I_A,Concurrent INSTALL A (drive-a),201 or retryable 409,201,VALID,ACCEPTED,,0.684502,PASS,Independent slots; initial attempt
+I_B,Concurrent INSTALL B (drive-b),201 or retryable 409,409,,,PHANTOM_READ_CONFLICT,0.685606,RETRY_REQUIRED,Independent slots; initial attempt
+R_B,Retry INSTALL B (same eventId and operationId),201,201,VALID,ACCEPTED,,0.662188,PASS,New Fabric transaction ID; retried after A committed
+V_A,Read decision for event A,200,200,,ACCEPTED,,,PASS,ACCEPTED
+V_B,Read decision for event B,200,200,,ACCEPTED,,,PASS,ACCEPTED
+V_STATE,Reconstruct final DPP state,200,200,,,,,PASS,"Two active intervals: drive-a/motor-a, drive-b/motor-b"

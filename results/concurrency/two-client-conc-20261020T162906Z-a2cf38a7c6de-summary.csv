@@ -1,0 +1,7 @@
+test_id,scenario,operation,http_status,fabric_status,semantic_outcome,validation_code,time_total_seconds,result,observation
+A1,same slot,INSTALL,201,VALID,ACCEPTED,,0.671215,PASS,One of two same-slot writes succeeds; the other is invalidated at Fabric commit
+A2,same slot,INSTALL,409,,,MVCC_READ_CONFLICT,0.674880,PASS,One of two same-slot writes succeeds; the other is invalidated at Fabric commit
+B1,different slots,INSTALL,409,,,PHANTOM_READ_CONFLICT,0.677944,FAIL,Independent-slot write unexpectedly invalidated by phantom read
+B2,different slots,INSTALL,201,VALID,ACCEPTED,,0.677944,PASS,Independent-slot write committed
+A-STATE,same slot,reconstructState,200,,,,,PASS,1 active interval(s); expected at most 1
+B-STATE,different slots,reconstructState,200,,,,,FAIL,1 active interval(s); expected 2

@@ -255,6 +255,7 @@ public class LifecycleEventService extends AbstractLedgerService<LifecycleEvent>
         ctx.getStub().putStringState(slotKey, event.getId());
         ctx.getStub().putStringState(lastComponentKey(component), event.getEffectiveTime().toString());
         ctx.getStub().putStringState(lastSlotKey(host, slot), event.getEffectiveTime().toString());
+        TemporalProvenanceService.recordHostedComponent(ctx, host);
         ctx.getStub().delState(reuseReadyKey(component));
         return accepted(event, "Component installed.");
     }

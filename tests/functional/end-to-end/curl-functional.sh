@@ -11,7 +11,7 @@ BASE_URL="${BASE_URL:-http://localhost:8081}"
 BASE_URL="${BASE_URL%/}"
 # Timestamp plus random bytes: fresh entity IDs and operationIds on every run.
 RUN_ID="e2e-$(date -u +%Y%m%dT%H%M%SZ)-$(od -An -N6 -tx1 /dev/urandom | tr -d "[:space:]")"
-LOG_FILE="${LOG_FILE:-results/functional/end-to-end/api-curl-${RUN_ID}.log}"
+LOG_FILE="${LOG_FILE:-results/functional/end-to-end/api-curl-${RUN_ID}-2.log}"
 mkdir -p "$(dirname "$LOG_FILE")"
 exec > >(tee -a "$LOG_FILE") 2>&1
 printf 'DPP-Prov-Ver API curl functional run\nRUN_ID=%s\nBASE_URL=%s\nLOG_FILE=%s\n' "$RUN_ID" "$BASE_URL" "$LOG_FILE"
