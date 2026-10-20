@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software in your research, please cite this repository."
+type: software
+title: "DPP-Prov-Ver: Temporal Provenance, Causal Versioning, and Conflict Resolution for Digital Product Passports"
+authors:
+  - family-names: Miron
+    given-names: Radu
+    affiliation: "Technical University of Cluj-Napoca"
+abstract: >-
+  Research prototype built on Hyperledger Fabric for temporal component
+  provenance, causal lifecycle versioning, semantic conflict detection,
+  conflict resolution, and historical corrections in distributed Digital
+  Product Passports.
+keywords:
+  - digital product passport
+  - Hyperledger Fabric
+  - temporal provenance
+  - vector clocks
+  - conflict resolution
+  - blockchain
+license: Apache-2.0
