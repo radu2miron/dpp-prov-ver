@@ -41,8 +41,8 @@ The intended repository layout is shown below. Directories for the API, benchmar
 
 ```text
 dpp-prov-ver/
-├── chaincode/                  Java chaincode, Maven project, deployment instructions
-├── backend/                    Spring Boot API and historical projection (planned)
+├── dpp-prov-ver-chaincode/     Java chaincode, Maven project, deployment instructions
+├── dpp-prov-ver-api/           Spring Boot API and historical projection (planned)
 ├── tests/
 │   ├── functional/             CLI scenarios, expected outcomes, regression tests
 │   ├── concurrency/            Concurrent transaction and MVCC tests (planned)

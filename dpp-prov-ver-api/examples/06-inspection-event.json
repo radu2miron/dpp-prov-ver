@@ -1,0 +1,5 @@
+{"docType":"LIFECYCLE_EVENT","id":"api-inspect-01","operationId":"op-api-inspect-01",
+ "type":"INSPECT","actorId":"api-actor-01","dppIds":["api-dpp-01"],
+ "affectedAssetIds":["api-motor-01"],"parentEventIds":[],
+ "effectiveTime":"2026-10-20T10:00:00Z","issuedAt":"2026-10-20T15:00:00Z",
+ "data":{"assetId":"api-motor-01","inspectionResult":"PASSED"}}

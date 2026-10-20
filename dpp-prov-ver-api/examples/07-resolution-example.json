@@ -1,0 +1,5 @@
+{"docType":"RESOLUTION","id":"api-resolution-01","action":"ACCEPT_EVENT",
+ "decidedAt":"2026-10-20T15:30:00Z","policyRef":"REVIEW_V1",
+ "reason":"Confirmed existing acceptance decision.",
+ "conflictId":"REPLACE-WITH-EXISTING-CONFLICT-ID",
+ "selectedEventId":"REPLACE-WITH-ACCEPTED-CONFLICT-EVENT-ID","actorId":"api-actor-01"}
