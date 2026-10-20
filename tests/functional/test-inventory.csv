@@ -1,0 +1,398 @@
+stage,command_number,function,record_id,compatibility,expected_description
+1,1,createActor,tcrud-actor-01,historical,HISTORICAL TEST — Create actor.
+1,2,createAsset,tcrud-host-01,obsolete_payload,LEGACY / OLD ASSET SCHEMA — Create host asset for P1; remove name/owner/status for modern code.
+1,3,createAsset,tcrud-motor-01,obsolete_payload,LEGACY / OLD ASSET SCHEMA — Create motor asset M1 (historical Asset schema); remove name/owner/status for modern code.
+1,4,createDigitalProductPassport,tcrud-dpp-01,historical,HISTORICAL TEST — Create DPP.
+1,5,createLifecycleEvent,tcrud-event-01,removed_endpoint,LEGACY / REMOVED ENDPOINT — Create lifecycle event 1 using removed direct endpoint; preserved as historical evidence only.
+1,6,createLifecycleEvent,tcrud-event-02,removed_endpoint,LEGACY / REMOVED ENDPOINT — Create lifecycle event 2 using removed direct endpoint; preserved as historical evidence only.
+1,7,createContainmentInterval,tcrud-interval-01,removed_endpoint,LEGACY / REMOVED ENDPOINT — Create containment interval using removed direct endpoint; preserved as historical evidence only.
+1,8,createInspection,tcrud-inspection-01,removed_endpoint,LEGACY / REMOVED ENDPOINT — Create inspection using removed direct endpoint; preserved as historical evidence only.
+1,9,createAcceptanceDecision,tcrud-decision-01,removed_endpoint,LEGACY / REMOVED ENDPOINT — Create acceptance decision using removed direct endpoint; preserved as historical evidence only.
+1,10,createConflict,tcrud-conflict-01,removed_endpoint,LEGACY / REMOVED ENDPOINT — Create conflict using removed direct endpoint; preserved as historical evidence only.
+1,11,createResolution,tcrud-resolution-01,removed_endpoint,LEGACY / REMOVED ENDPOINT — Create resolution using removed direct endpoint; preserved as historical evidence only.
+1,12,readActor,tcrud-actor-01,historical,HISTORICAL TEST — Read actor.
+1,13,readAsset,tcrud-host-01,historical,HISTORICAL TEST — Read host asset.
+1,14,readAsset,tcrud-motor-01,historical,HISTORICAL TEST — Read motor asset.
+1,15,readDigitalProductPassport,tcrud-dpp-01,historical,HISTORICAL TEST — Read DPP.
+1,16,readLifecycleEvent,tcrud-event-01,historical,HISTORICAL TEST — Read first event.
+1,17,readContainmentInterval,tcrud-interval-01,historical,HISTORICAL TEST — Read interval.
+1,18,readInspection,tcrud-inspection-01,historical,HISTORICAL TEST — Read inspection.
+1,19,readAcceptanceDecision,tcrud-decision-01,historical,HISTORICAL TEST — Read decision.
+1,20,readConflict,tcrud-conflict-01,historical,HISTORICAL TEST — Read conflict.
+1,21,readResolution,tcrud-resolution-01,historical,HISTORICAL TEST — Read resolution.
+1,22,updateActor,tcrud-actor-01,historical,HISTORICAL TEST — Update actor role.
+1,23,readActor,tcrud-actor-01,historical,HISTORICAL TEST — Verify updated actor role.
+1,24,updateAsset,tcrud-motor-01,historical,HISTORICAL TEST — Update motor metadata.
+1,25,readAsset,tcrud-motor-01,historical,HISTORICAL TEST — Verify updated motor.
+1,26,updateDigitalProductPassport,tcrud-dpp-01,historical,HISTORICAL TEST — Update DPP schemaVersion.
+1,27,readDigitalProductPassport,tcrud-dpp-01,historical,HISTORICAL TEST — Verify updated DPP.
+1,28,getAllActors,,historical,HISTORICAL TEST — List actors.
+1,29,getAllAssets,,historical,HISTORICAL TEST — List assets.
+1,30,getAllDigitalProductPassports,,historical,HISTORICAL TEST — List DPPs.
+1,31,getAllLifecycleEvents,,historical,HISTORICAL TEST — List lifecycle events.
+1,32,getAllContainmentIntervals,,historical,HISTORICAL TEST — List containment intervals.
+1,33,getAllInspections,,historical,HISTORICAL TEST — List inspections.
+1,34,getAllAcceptanceDecisions,,historical,HISTORICAL TEST — List acceptance decisions.
+1,35,getAllConflicts,,historical,HISTORICAL TEST — List conflicts.
+1,36,getAllResolutions,,historical,HISTORICAL TEST — List resolutions.
+1,37,createActor,tcrud-shared-id,historical,HISTORICAL TEST — Create actor using a shared ID.
+1,38,createAsset,tcrud-shared-id,obsolete_payload,LEGACY / OLD ASSET SCHEMA — Create asset with the same shared ID; remove name/owner/status for modern code.
+1,39,readActor,tcrud-shared-id,historical,HISTORICAL TEST — Read actor by shared ID.
+1,40,readAsset,tcrud-shared-id,historical,HISTORICAL TEST — Read asset by shared ID.
+1,41,createAsset,tcrud-motor-01,obsolete_payload,LEGACY / OLD ASSET SCHEMA — Reject duplicate asset ID; remove name/owner/status for modern code.
+1,42,readAsset,tcrud-missing-asset,historical,HISTORICAL TEST — Reject reading a nonexistent asset.
+1,43,updateAsset,tcrud-missing-asset,historical,HISTORICAL TEST — Reject update of a nonexistent asset.
+1,44,updateAsset,tcrud-motor-01,historical,HISTORICAL TEST — Reject changing an immutable asset identity field.
+1,45,updateDigitalProductPassport,tcrud-dpp-01,historical,HISTORICAL TEST — Reject changing immutable rootAssetId.
+1,46,createInspection,tcrud-inspection-invalid,removed_endpoint,LEGACY / REMOVED ENDPOINT — Reject invalid InspectionResult enumeration; preserved as historical evidence only.
+1,47,createActor,{,historical,HISTORICAL TEST — Reject blank actor ID.
+1,48,createAsset,tcrud-wrong-type,obsolete_payload,LEGACY / OLD ASSET SCHEMA — Reject incorrect Asset docType; remove name/owner/status for modern code.
+2,1,createActor,lc26-actor,historical,HISTORICAL TEST 01 — Create lifecycle-test actor.
+2,2,createAsset,lc26-unit1,historical,HISTORICAL TEST 02 — Create first industrial unit.
+2,3,createAsset,lc26-unit2,historical,HISTORICAL TEST 03 — Create second industrial unit.
+2,4,createAsset,lc26-motor1,historical,HISTORICAL TEST 04 — Create first motor.
+2,5,createAsset,lc26-motor2,historical,HISTORICAL TEST 05 — Create second motor.
+2,6,createDigitalProductPassport,lc26-dpp1,historical,HISTORICAL TEST 06 — Create first DPP.
+2,7,createDigitalProductPassport,lc26-dpp2,historical,HISTORICAL TEST 07 — Create second DPP.
+2,8,readAsset,lc26-motor1,historical,HISTORICAL TEST 08 — Read initial asset.
+2,9,readDigitalProductPassport,lc26-dpp1,historical,HISTORICAL TEST 09 — Read initial DPP.
+2,10,submitEvent,lc26-install1,historical,HISTORICAL TEST 10 — Accept initial installation of motor 1 in unit 1.
+2,11,readLifecycleEvent,lc26-install1,historical,HISTORICAL TEST 11 — Read initial INSTALL event.
+2,12,readContainmentInterval,lc26-install1,historical,HISTORICAL TEST 12 — Read the first containment interval.
+2,13,readAcceptanceDecision,decision:lc26-install1,historical,HISTORICAL TEST 13 — Read INSTALL acceptance decision.
+2,14,submitEvent,lc26-install1,historical,HISTORICAL TEST 14 — Retry identical INSTALL idempotently.
+2,15,submitEvent,lc26-conflict-component,historical,HISTORICAL TEST 15 — Reject installation because the component is already occupied.
+2,16,readConflict,lc26-conflict-component,historical,HISTORICAL TEST 16 — Read component-occupancy conflict.
+2,17,readAcceptanceDecision,decision:lc26-conflict-component,historical,HISTORICAL TEST 17 — Read rejection decision for component conflict.
+2,18,submitEvent,lc26-conflict-slot,historical,HISTORICAL TEST 18 — Reject installation into an occupied slot.
+2,19,readConflict,lc26-conflict-slot,historical,HISTORICAL TEST 19 — Read slot-occupancy conflict.
+2,20,readAcceptanceDecision,decision:lc26-conflict-slot,historical,HISTORICAL TEST 20 — Read rejection decision for slot conflict.
+2,21,submitEvent,lc26-inspect1,historical,HISTORICAL TEST 21 — Accept inspection of motor 1.
+2,22,readInspection,lc26-inspect1,historical,HISTORICAL TEST 22 — Read inspection document.
+2,23,submitEvent,lc26-remove1,historical,HISTORICAL TEST 23 — Accept removal of motor 1 from unit 1.
+2,24,readContainmentInterval,lc26-install1,historical,HISTORICAL TEST 24 — Read closed interval after removal.
+2,25,readAcceptanceDecision,decision:lc26-remove1,historical,HISTORICAL TEST 25 — Read REMOVE acceptance decision.
+2,26,submitEvent,lc26-backdated-install,historical,HISTORICAL TEST 26 — Reject backdated INSTALL.
+2,27,readAcceptanceDecision,decision:lc26-backdated-install,historical,HISTORICAL TEST 27 — Read rejection decision for backdated INSTALL.
+2,28,submitEvent,lc26-install2,obsolete_lifecycle_expectation,OUTDATED EXPECTATION 28 — Accept installation of motor 1 in unit 2 (obsolete direct-reinstall rule).
+2,29,readContainmentInterval,lc26-install2,historical,HISTORICAL TEST 29 — Read new containment interval for motor 1.
+2,30,submitEvent,lc26-install3,historical,HISTORICAL TEST 30 — Accept installation of motor 2 in the freed unit-1 slot.
+2,31,readContainmentInterval,lc26-install3,historical,HISTORICAL TEST 31 — Read motor-2 containment interval.
+2,32,submitEvent,lc26-cycle,historical,HISTORICAL TEST 32 — Reject cyclic containment.
+2,33,readAcceptanceDecision,decision:lc26-cycle,historical,HISTORICAL TEST 33 — Read rejected cycle decision.
+2,34,submitEvent,lc26-remove-wrong-host,historical,HISTORICAL TEST 34 — Reject removal from a nonmatching host.
+2,35,submitEvent,lc26-remove-backdated,historical,HISTORICAL TEST 35 — Reject removal dated before installation.
+2,36,submitEvent,lc26-self-install,historical,HISTORICAL TEST 36 — Reject self-installation.
+2,37,getAllActors,,historical,HISTORICAL TEST 37 — List actors.
+2,38,getAllAssets,,historical,HISTORICAL TEST 38 — List assets.
+2,39,getAllDigitalProductPassports,,historical,HISTORICAL TEST 39 — List digital product passports.
+2,40,getAllLifecycleEvents,,historical,HISTORICAL TEST 40 — List lifecycle events.
+2,41,getAllContainmentIntervals,,historical,HISTORICAL TEST 41 — List containment intervals.
+2,42,getAllInspections,,historical,HISTORICAL TEST 42 — List inspections.
+2,43,getAllAcceptanceDecisions,,historical,HISTORICAL TEST 43 — List acceptance decisions.
+2,44,getAllConflicts,,historical,HISTORICAL TEST 44 — List conflicts.
+2,45,getAllResolutions,,historical,HISTORICAL TEST 45 — List resolutions.
+2,46,readAsset,lc26-motor1,historical,HISTORICAL TEST 46 — Read final motor-1 asset.
+2,47,readContainmentInterval,lc26-install2,historical,HISTORICAL TEST 47 — Read final motor-1 interval.
+2,48,readContainmentInterval,lc26-install3,historical,HISTORICAL TEST 48 — Read final motor-2 interval.
+2,49,createAsset,lc26-motor1,historical,HISTORICAL TEST 49 — Reject duplicate asset creation.
+2,50,readAsset,lc26-ghost-asset,historical,HISTORICAL TEST 50 — Reject reading an unknown asset.
+2,51,submitEvent,lc26-duplicateop,historical,HISTORICAL TEST 51 — Reject operationId reused with changed event content.
+2,52,submitEvent,lc26-unsupported-repair,obsolete_lifecycle_expectation,OUTDATED EXPECTATION 52 — Reject unsupported REPAIR under the early lifecycle implementation (now implemented).
+2,53,submitEvent,lc26-missing-actor,historical,HISTORICAL TEST 53 — Reject event with missing actor reference.
+2,54,submitEvent,lc26-missing-data,historical,HISTORICAL TEST 54 — Reject event with missing required data.
+2,55,submitEvent,lc26-missing-parent,historical,HISTORICAL TEST 55 — Reject event referencing a nonexistent causal parent.
+2,56,submitEvent,lc26-invalid-enum,historical,HISTORICAL TEST 56 — Reject invalid InspectionResult.
+3,1,createActor,rr26-actor,historical,HISTORICAL TEST 01 — Create the repair-and-reuse test actor.
+3,2,createAsset,rr26-unit1,historical,HISTORICAL TEST 02 — Create host unit 1.
+3,3,createAsset,rr26-unit2,historical,HISTORICAL TEST 03 — Create host unit 2.
+3,4,createAsset,rr26-motor1,historical,HISTORICAL TEST 04 — Create motor 1.
+3,5,createDigitalProductPassport,rr26-dpp1,historical,HISTORICAL TEST 05 — Create DPP for unit 1.
+3,6,createDigitalProductPassport,rr26-dpp2,historical,HISTORICAL TEST 06 — Create DPP for unit 2.
+3,7,readAsset,rr26-motor1,historical,HISTORICAL TEST 07 — Read motor 1 and verify its persistent ID.
+3,8,submitEvent,rr26-reuse-no-history,historical,HISTORICAL TEST 08 — Reject REUSE when the component has never been installed.
+3,9,submitEvent,rr26-repair-no-inspection,historical,HISTORICAL TEST 09 — Reject REPAIR when no failed inspection exists.
+3,10,submitEvent,rr26-install-p1,historical,HISTORICAL TEST 10 — Accept initial installation of motor 1 in unit 1.
+3,11,readContainmentInterval,rr26-install-p1,historical,HISTORICAL TEST 11 — Read the open containment interval for unit 1.
+3,12,submitEvent,rr26-repair-attached,historical,HISTORICAL TEST 12 — Reject REPAIR while the component is installed.
+3,13,submitEvent,rr26-reuse-attached,historical,HISTORICAL TEST 13 — Reject REUSE while the component is installed.
+3,14,submitEvent,rr26-remove-p1,historical,HISTORICAL TEST 14 — Accept removal of motor 1 from unit 1.
+3,15,readContainmentInterval,rr26-install-p1,historical,HISTORICAL TEST 15 — Read the closed containment interval for unit 1.
+3,16,submitEvent,rr26-install-without-reuse,historical,HISTORICAL TEST 16 — Reject installation after removal without REUSE approval.
+3,17,submitEvent,rr26-reuse-no-pass,historical,HISTORICAL TEST 17 — Reject REUSE without a passed inspection.
+3,18,submitEvent,rr26-inspect-repair-needed,historical,HISTORICAL TEST 18 — Accept inspection outcome REQUIRES_REPAIR.
+3,19,readInspection,rr26-inspect-repair-needed,historical,HISTORICAL TEST 19 — Read the initial inspection result.
+3,20,submitEvent,rr26-reuse-after-failed-inspection,historical,HISTORICAL TEST 20 — Reject REUSE based on an unfavorable inspection.
+3,21,submitEvent,rr26-repair-missing-evidence,historical,HISTORICAL TEST 21 — Reject REPAIR without evidenceRef (transaction error).
+3,22,readLifecycleEvent,rr26-repair-missing-evidence,historical,HISTORICAL TEST 22 — Verify no event was committed for the failed REPAIR.
+3,23,readAcceptanceDecision,decision:rr26-repair-missing-evidence,historical,HISTORICAL TEST 23 — Verify no decision was committed for the failed REPAIR.
+3,24,submitEvent,rr26-repair-before-inspection,historical,HISTORICAL TEST 24 — Reject REPAIR with an effective time before inspection.
+3,25,submitEvent,rr26-repair1,historical,HISTORICAL TEST 25 — Accept REPAIR with an evidence reference.
+3,26,readLifecycleEvent,rr26-repair1,historical,HISTORICAL TEST 26 — Read the accepted REPAIR event.
+3,27,readAcceptanceDecision,decision:rr26-repair1,historical,HISTORICAL TEST 27 — Read the accepted REPAIR decision.
+3,28,submitEvent,rr26-repair1,historical,HISTORICAL TEST 28 — Retry the identical REPAIR operation idempotently.
+3,29,submitEvent,rr26-repair-again,historical,HISTORICAL TEST 29 — Reject repeated REPAIR for the same inspection.
+3,30,submitEvent,rr26-inspect-before-repair,historical,HISTORICAL TEST 30 — Reject an inspection dated before the latest repair.
+3,31,submitEvent,rr26-reuse-before-postrepair-inspection,historical,HISTORICAL TEST 31 — Reject REUSE until a post-repair inspection passes.
+3,32,submitEvent,rr26-inspect-pass1,historical,HISTORICAL TEST 32 — Accept a PASSED inspection after REPAIR.
+3,33,readInspection,rr26-inspect-pass1,historical,HISTORICAL TEST 33 — Read the successful inspection record.
+3,34,submitEvent,rr26-repair-after-pass,historical,HISTORICAL TEST 34 — Reject REPAIR following a PASSED inspection.
+3,35,submitEvent,rr26-reuse-before-inspection,historical,HISTORICAL TEST 35 — Reject REUSE dated before the passing inspection.
+3,36,submitEvent,rr26-reuse-approval1,historical,HISTORICAL TEST 36 — Accept REUSE approval.
+3,37,readAcceptanceDecision,decision:rr26-reuse-approval1,historical,HISTORICAL TEST 37 — Read the accepted REUSE decision.
+3,38,submitEvent,rr26-reuse-double-approval,historical,HISTORICAL TEST 38 — Reject a second REUSE without an intervening installation.
+3,39,submitEvent,rr26-install-before-reuse-time,historical,HISTORICAL TEST 39 — Reject an INSTALL dated before REUSE approval.
+3,40,submitEvent,rr26-inspect-pass2,historical,HISTORICAL TEST 40 — Accept a new inspection that invalidates existing REUSE approval.
+3,41,submitEvent,rr26-install-after-reinspection,historical,HISTORICAL TEST 41 — Reject INSTALL without renewed REUSE approval.
+3,42,submitEvent,rr26-reuse-approval2,historical,HISTORICAL TEST 42 — Accept renewed REUSE approval.
+3,43,submitEvent,rr26-install-p2,historical,HISTORICAL TEST 43 — Accept installation of motor 1 in unit 2.
+3,44,readContainmentInterval,rr26-install-p2,historical,HISTORICAL TEST 44 — Read the open unit-2 containment interval.
+3,45,readContainmentInterval,rr26-install-p1,historical,HISTORICAL TEST 45 — Read the preserved historical interval in unit 1.
+3,46,submitEvent,rr26-reuse-mounted-p2,historical,HISTORICAL TEST 46 — Reject REUSE while motor 1 is installed in unit 2.
+3,47,submitEvent,rr26-remove-p2,historical,HISTORICAL TEST 47 — Accept removal of motor 1 from unit 2.
+3,48,readContainmentInterval,rr26-install-p2,historical,HISTORICAL TEST 48 — Read the closed unit-2 containment interval.
+3,49,submitEvent,rr26-reuse-after-second-remove-stale,historical,HISTORICAL TEST 49 — Reject REUSE when the passed inspection predates removal.
+3,50,submitEvent,rr26-inspect-pass3,historical,HISTORICAL TEST 50 — Accept PASSED inspection after the second removal.
+3,51,submitEvent,rr26-reuse-approval3,historical,HISTORICAL TEST 51 — Accept REUSE after the new inspection.
+3,52,submitEvent,rr26-install-p1-again,historical,HISTORICAL TEST 52 — Accept return installation of motor 1 in unit 1.
+3,53,readContainmentInterval,rr26-install-p1-again,historical,HISTORICAL TEST 53 — Read the new open interval for unit 1.
+3,54,readAsset,rr26-motor1,historical,HISTORICAL TEST 54 — Read the asset to confirm the original component identity.
+3,55,getAllAcceptanceDecisions,,historical,HISTORICAL TEST 55 — List all acceptance decisions.
+3,56,getAllLifecycleEvents,,historical,HISTORICAL TEST 56 — List all lifecycle events.
+3,57,getAllInspections,,historical,HISTORICAL TEST 57 — List all inspections.
+3,58,getAllContainmentIntervals,,historical,HISTORICAL TEST 58 — List all containment intervals.
+3,59,submitEvent,rr26-op-reuse-invalid,historical,HISTORICAL TEST 59 — Reject reusing an operationId with different event content.
+3,60,readLifecycleEvent,rr26-op-reuse-invalid,historical,HISTORICAL TEST 60 — Verify the invalid operationId reuse did not persist an event.
+3,61,submitEvent,rr26-missing-actor,historical,HISTORICAL TEST 61 — Reject an event submitted by a nonexistent actor.
+3,62,submitEvent,rr26-bad-enum,historical,HISTORICAL TEST 62 — Reject an invalid InspectionResult enum value.
+3,63,submitEvent,rr26-missing-data,historical,HISTORICAL TEST 63 — Reject an event missing required data.
+4,1,createActor,cv26-actor-a,historical,HISTORICAL TEST 01 — Create causal-test actor A.
+4,2,createActor,cv26-actor-b,historical,HISTORICAL TEST 02 — Create causal-test actor B.
+4,3,createActor,cv26-actor-c,historical,HISTORICAL TEST 03 — Create causal-test actor C.
+4,4,createActor,cv26-actor-d,historical,HISTORICAL TEST 04 — Create causal-test actor D.
+4,5,createAsset,cv26-motor1,historical,HISTORICAL TEST 05 — Create motor 1.
+4,6,createAsset,cv26-motor2,historical,HISTORICAL TEST 06 — Create motor 2.
+4,7,createAsset,cv26-motor3,historical,HISTORICAL TEST 07 — Create motor 3.
+4,8,createAsset,cv26-host1,historical,HISTORICAL TEST 08 — Create host 1.
+4,9,createAsset,cv26-host2,historical,HISTORICAL TEST 09 — Create host 2.
+4,10,createAsset,cv26-sensor1,historical,HISTORICAL TEST 10 — Create sensor 1.
+4,11,createDigitalProductPassport,cv26-dpp1,historical,HISTORICAL TEST 11 — Create DPP 1.
+4,12,createDigitalProductPassport,cv26-dpp2,historical,HISTORICAL TEST 12 — Create DPP 2.
+4,13,submitEvent,cv26-install-a1,historical,HISTORICAL TEST 13 — Accept first installation; expected automatically generated clock {A:1}.
+4,14,readLifecycleEvent,cv26-install-a1,historical,HISTORICAL TEST 14 — Read the event and inspect clock {A:1}.
+4,15,submitEvent,cv26-install-a1,historical,HISTORICAL TEST 15 — Retry the identical event; expect idempotency and no clock increment.
+4,16,readContainmentInterval,cv26-install-a1,historical,HISTORICAL TEST 16 — Read the open interval for the original installation.
+4,17,submitEvent,cv26-inspect-b1,historical,HISTORICAL TEST 17 — Accept concurrent inspection by actor B with clock {B:1}.
+4,18,readLifecycleEvent,cv26-inspect-b1,historical,HISTORICAL TEST 18 — Read the inspection event and clock {B:1}.
+4,19,submitEvent,cv26-install-b-conflict,historical,"HISTORICAL TEST 19 — Reject causally concurrent, incompatible installation."
+4,20,readConflict,causal:cv26-install-b-conflict,historical,HISTORICAL TEST 20 — Read PENDING conflict referencing the first installation.
+4,21,readAcceptanceDecision,decision:cv26-install-b-conflict,historical,HISTORICAL TEST 21 — Read REJECTED decision for the conflicting installation.
+4,22,readContainmentInterval,cv26-install-b-conflict,historical,HISTORICAL TEST 22 — Confirm that the rejected installation created no interval.
+4,23,submitEvent,cv26-remove-c1,historical,"HISTORICAL TEST 23 — Accept REMOVE causally dependent on A; expected clock {A:1,C:1}."
+4,24,readLifecycleEvent,cv26-remove-c1,historical,HISTORICAL TEST 24 — Read the REMOVE event and merged clock.
+4,25,readContainmentInterval,cv26-install-a1,historical,HISTORICAL TEST 25 — Read the closed interval after removal.
+4,26,submitEvent,cv26-inspect-a2,historical,"HISTORICAL TEST 26 — Accept compatible PASSED inspection; expected clock {A:2,C:1}."
+4,27,readLifecycleEvent,cv26-inspect-a2,historical,HISTORICAL TEST 27 — Read the accepted inspection and expected clock.
+4,28,submitEvent,cv26-reuse-no-ack,historical,HISTORICAL TEST 28 — Reject REUSE that does not acknowledge B's concurrent inspection.
+4,29,readConflict,causal:cv26-reuse-no-ack,historical,HISTORICAL TEST 29 — Read the resulting PENDING causal conflict.
+4,30,readAcceptanceDecision,decision:cv26-reuse-no-ack,historical,HISTORICAL TEST 30 — Read the REJECTED decision for REUSE without acknowledgment.
+4,31,submitEvent,cv26-reuse-ack,historical,"HISTORICAL TEST 31 — Accept REUSE acknowledging B; expected clock {A:4,B:1,C:1}."
+4,32,readLifecycleEvent,cv26-reuse-ack,historical,HISTORICAL TEST 32 — Read the REUSE event and merged vector clock.
+4,33,submitEvent,cv26-install-a2,historical,HISTORICAL TEST 33 — Accept installation in host 2 after REUSE.
+4,34,readContainmentInterval,cv26-install-a2,historical,HISTORICAL TEST 34 — Read the new host-2 interval.
+4,35,submitEvent,cv26-install-c-motor2,historical,HISTORICAL TEST 35 — Accept installation of motor 2 into an auxiliary slot.
+4,36,submitEvent,cv26-install-b-slot-conflict,historical,HISTORICAL TEST 36 — Reject concurrent installation of motor 3 into the same auxiliary slot.
+4,37,readConflict,causal:cv26-install-b-slot-conflict,historical,HISTORICAL TEST 37 — Read the PENDING slot conflict referencing motor-2 installation.
+4,38,readContainmentInterval,cv26-install-b-slot-conflict,historical,HISTORICAL TEST 38 — Verify the conflicting interval was not written.
+4,39,submitEvent,cv26-install-b-slot-ok,historical,HISTORICAL TEST 39 — Accept installation of motor 3 into a different slot.
+4,40,readContainmentInterval,cv26-install-b-slot-ok,historical,HISTORICAL TEST 40 — Read the interval with slotId=aux2.
+4,41,submitEvent,cv26-inspect-a-motor2,historical,HISTORICAL TEST 41 — Accept PASSED inspection for motor 2.
+4,42,submitEvent,cv26-inspect-c-conflict,historical,HISTORICAL TEST 42 — Reject concurrent contradictory FAILED inspection.
+4,43,readConflict,causal:cv26-inspect-c-conflict,historical,HISTORICAL TEST 43 — Read PENDING conflict referencing the passed inspection.
+4,44,readAcceptanceDecision,decision:cv26-inspect-c-conflict,historical,HISTORICAL TEST 44 — Read REJECTED inspection decision.
+4,45,readInspection,cv26-inspect-c-conflict,historical,HISTORICAL TEST 45 — Verify no inspection record exists for the rejected event.
+4,46,submitEvent,cv26-inspect-d-valid1,historical,HISTORICAL TEST 46 — Accept an explicitly supplied valid clock {D:1}.
+4,47,readLifecycleEvent,cv26-inspect-d-valid1,historical,HISTORICAL TEST 47 — Read the accepted event and clock {D:1}.
+4,48,submitEvent,cv26-inspect-d-forged,historical,HISTORICAL TEST 48 — Reject forged explicit clock {D:99} when {D:2} is required.
+4,49,readLifecycleEvent,cv26-inspect-d-forged,historical,HISTORICAL TEST 49 — Verify the invalid-clock event was not persisted.
+4,50,readAcceptanceDecision,decision:cv26-inspect-d-forged,historical,HISTORICAL TEST 50 — Verify the invalid-clock decision was not persisted.
+4,51,submitEvent,cv26-inspect-d-valid2,historical,HISTORICAL TEST 51 — Accept next valid event with clock {D:2}.
+4,52,readLifecycleEvent,cv26-inspect-d-valid2,historical,HISTORICAL TEST 52 — Read the event with clock {D:2}.
+4,53,submitEvent,cv26-inspect-d-missing-parent,historical,HISTORICAL TEST 53 — Reject nonexistent causal parent.
+4,54,readLifecycleEvent,cv26-inspect-d-missing-parent,historical,HISTORICAL TEST 54 — Verify no event was committed for the missing parent.
+4,55,submitEvent,cv26-inspect-d-rejected-parent,historical,HISTORICAL TEST 55 — Reject a known but rejected causal parent.
+4,56,readLifecycleEvent,cv26-inspect-d-rejected-parent,historical,HISTORICAL TEST 56 — Verify the invalid event was not persisted.
+4,57,submitEvent,cv26-inspect-d-valid3,historical,HISTORICAL TEST 57 — Accept actor D's third event with clock {D:3}.
+4,58,readLifecycleEvent,cv26-inspect-d-valid3,historical,HISTORICAL TEST 58 — Read the event and confirm failed submissions did not advance D's clock.
+4,59,submitEvent,cv26-install-different-op,historical,HISTORICAL TEST 59 — Reject reuse of operationId with altered content.
+4,60,readLifecycleEvent,cv26-install-different-op,historical,HISTORICAL TEST 60 — Verify no event was stored for the invalid retry.
+4,61,createActor,cv26-actor-e,historical,HISTORICAL TEST 61 — Create actor E.
+4,62,createAsset,cv26-sensor2,historical,HISTORICAL TEST 62 — Create sensor 2.
+4,63,submitEvent,cv26-inspect-e-parent,historical,"HISTORICAL TEST 63 — Accept a cross-actor dependency on D's third event; clock {D:3,E:1}."
+4,64,readLifecycleEvent,cv26-inspect-e-parent,historical,HISTORICAL TEST 64 — Read the event and verify the cross-actor clock.
+4,65,getAllConflicts,,historical,"HISTORICAL TEST 65 — List conflicts, including the expected causal conflict IDs."
+4,66,getAllAcceptanceDecisions,,historical,"HISTORICAL TEST 66 — List semantic decisions, including REJECTED outcomes."
+4,67,getAllLifecycleEvents,,historical,HISTORICAL TEST 67 — List accepted and rejected persisted assertions; exclude invalid submissions.
+5,1,createActor,rs26-actor-a,historical,HISTORICAL TEST 01 — Create conflict-resolution actor A.
+5,2,createActor,rs26-actor-b,historical,HISTORICAL TEST 02 — Create conflict-resolution actor B.
+5,3,createActor,rs26-actor-c,historical,HISTORICAL TEST 03 — Create conflict-resolution actor C.
+5,4,createAsset,rs26-motor1,historical,HISTORICAL TEST 04 — Create motor 1.
+5,5,createAsset,rs26-motor2,historical,HISTORICAL TEST 05 — Create motor 2.
+5,6,createAsset,rs26-motor3,historical,HISTORICAL TEST 06 — Create motor 3.
+5,7,createAsset,rs26-host1,historical,HISTORICAL TEST 07 — Create host 1.
+5,8,createAsset,rs26-host2,historical,HISTORICAL TEST 08 — Create host 2.
+5,9,createAsset,rs26-sensor1,historical,HISTORICAL TEST 09 — Create sensor 1.
+5,10,createDigitalProductPassport,rs26-dpp1,historical,HISTORICAL TEST 10 — Create DPP 1.
+5,11,createDigitalProductPassport,rs26-dpp2,historical,HISTORICAL TEST 11 — Create DPP 2.
+5,12,submitEvent,rs26-install-a1,historical,"HISTORICAL TEST 12 — Accept motor 1 installation into host 1, drive slot."
+5,13,readContainmentInterval,rs26-install-a1,historical,HISTORICAL TEST 13 — Read the accepted installation interval.
+5,14,submitEvent,rs26-install-b-conflict,historical,HISTORICAL TEST 14 — Reject the second concurrent installation of motor 1.
+5,15,readConflict,causal:rs26-install-b-conflict,historical,HISTORICAL TEST 15 — Read the PENDING causal conflict and involved event IDs.
+5,16,readAcceptanceDecision,decision:rs26-install-b-conflict,historical,HISTORICAL TEST 16 — Read the REJECTED decision for the concurrent installation.
+5,17,readContainmentInterval,rs26-install-b-conflict,historical,HISTORICAL TEST 17 — Verify the rejected installation produced no interval.
+5,18,submitEvent,rs26-inspect-a-passed,historical,HISTORICAL TEST 18 — Accept PASSED inspection of sensor 1.
+5,19,readInspection,rs26-inspect-a-passed,historical,HISTORICAL TEST 19 — Read the accepted PASSED inspection.
+5,20,submitEvent,rs26-inspect-c-failed,historical,HISTORICAL TEST 20 — Reject incompatible concurrent FAILED inspection.
+5,21,readConflict,causal:rs26-inspect-c-failed,historical,HISTORICAL TEST 21 — Read the PENDING inspection conflict.
+5,22,readAcceptanceDecision,decision:rs26-inspect-c-failed,historical,HISTORICAL TEST 22 — Read the rejected inspection decision.
+5,23,readInspection,rs26-inspect-c-failed,historical,HISTORICAL TEST 23 — Verify no record exists for the rejected inspection.
+5,24,submitEvent,rs26-install-c-aux,historical,HISTORICAL TEST 24 — Accept installation of motor 2 in auxiliary slot.
+5,25,readContainmentInterval,rs26-install-c-aux,historical,HISTORICAL TEST 25 — Read the accepted motor-2 interval.
+5,26,submitEvent,rs26-slot-rejected,historical,HISTORICAL TEST 26 — Reject causally dependent installation into an occupied slot.
+5,27,readConflict,rs26-slot-rejected,historical,HISTORICAL TEST 27 — Read the PENDING structural conflict using its direct conflict ID.
+5,28,readAcceptanceDecision,decision:rs26-slot-rejected,historical,HISTORICAL TEST 28 — Read the rejected occupied-slot decision.
+5,29,readContainmentInterval,rs26-slot-rejected,historical,HISTORICAL TEST 29 — Verify the rejected motor-3 interval does not exist.
+5,30,resolveConflict,rs26-bad-not-member,historical,HISTORICAL TEST 30 — Reject a selectedEventId that is not part of the conflict.
+5,31,resolveConflict,rs26-bad-accept-rejected,historical,HISTORICAL TEST 31 — Reject ACCEPT_EVENT when the selected event was REJECTED.
+5,32,resolveConflict,rs26-bad-reject-accepted,historical,HISTORICAL TEST 32 — Reject REJECT_EVENT when the selected event was ACCEPTED.
+5,33,resolveConflict,rs26-bad-actor,historical,HISTORICAL TEST 33 — Reject resolution from a nonexistent actor.
+5,34,resolveConflict,rs26-bad-conflict,historical,HISTORICAL TEST 34 — Reject resolution of an unknown conflict.
+5,35,resolveConflict,rs26-bad-supersede,historical,HISTORICAL TEST 35 — Reject unsupported SUPERSEDE_DECISION action.
+5,36,resolveConflict,rs26-bad-correction,historical,HISTORICAL TEST 36 — Reject unsupported APPLY_CORRECTION action.
+5,37,resolveConflict,rs26-bad-no-reason,historical,HISTORICAL TEST 37 — Reject resolution with missing reason.
+5,38,resolveConflict,rs26-bad-doctype,historical,HISTORICAL TEST 38 — Reject resolution with incorrect docType.
+5,39,readConflict,causal:rs26-install-b-conflict,historical,HISTORICAL TEST 39 — Confirm the conflict remains PENDING after invalid requests.
+5,40,readResolution,rs26-bad-accept-rejected,historical,HISTORICAL TEST 40 — Verify no Resolution document was created by an invalid request.
+5,41,resolveConflict,rs26-resolve-install,historical,HISTORICAL TEST 41 — Resolve installation conflict by confirming the accepted event.
+5,42,readResolution,rs26-resolve-install,historical,HISTORICAL TEST 42 — Read stored resolution with action=ACCEPT_EVENT.
+5,43,readConflict,causal:rs26-install-b-conflict,historical,HISTORICAL TEST 43 — Read RESOLVED conflict linked to the new resolutionId.
+5,44,readAcceptanceDecision,decision:rs26-install-a1,historical,HISTORICAL TEST 44 — Read unchanged ACCEPTED decision for selected event.
+5,45,readAcceptanceDecision,decision:rs26-install-b-conflict,historical,HISTORICAL TEST 45 — Read unchanged REJECTED decision for competing event.
+5,46,readContainmentInterval,rs26-install-a1,historical,HISTORICAL TEST 46 — Confirm physical containment remains unchanged.
+5,47,resolveConflict,rs26-resolve-install,historical,HISTORICAL TEST 47 — Retry the identical resolution idempotently.
+5,48,resolveConflict,rs26-resolve-install,historical,HISTORICAL TEST 48 — Reject reused resolution ID with a different payload.
+5,49,resolveConflict,rs26-resolve-install-again,historical,HISTORICAL TEST 49 — Reject a second resolution ID for an already RESOLVED conflict.
+5,50,readResolution,rs26-resolve-install-again,historical,HISTORICAL TEST 50 — Verify the attempted alternative resolution was not created.
+5,51,resolveConflict,rs26-resolve-inspect,historical,HISTORICAL TEST 51 — Resolve inspection conflict by confirming the rejected assertion.
+5,52,readResolution,rs26-resolve-inspect,historical,HISTORICAL TEST 52 — Read stored resolution with action=REJECT_EVENT.
+5,53,readConflict,causal:rs26-inspect-c-failed,historical,HISTORICAL TEST 53 — Read RESOLVED inspection conflict and resolutionId.
+5,54,readInspection,rs26-inspect-a-passed,historical,HISTORICAL TEST 54 — Confirm the accepted PASSED inspection remains effective.
+5,55,readInspection,rs26-inspect-c-failed,historical,HISTORICAL TEST 55 — Verify the rejected inspection was not retroactively applied.
+5,56,resolveConflict,rs26-resolve-inspect,historical,HISTORICAL TEST 56 — Retry the identical REJECT_EVENT resolution idempotently.
+5,57,resolveConflict,rs26-resolve-slot,historical,HISTORICAL TEST 57 — Resolve occupied-slot conflict by confirming original installation.
+5,58,readConflict,rs26-slot-rejected,historical,HISTORICAL TEST 58 — Read RESOLVED structural conflict and resolutionId.
+5,59,readResolution,rs26-resolve-slot,historical,HISTORICAL TEST 59 — Read structural conflict resolution with ACCEPT_EVENT.
+5,60,readContainmentInterval,rs26-install-c-aux,historical,HISTORICAL TEST 60 — Confirm motor 2 still occupies the auxiliary slot.
+5,61,readContainmentInterval,rs26-slot-rejected,historical,HISTORICAL TEST 61 — Verify motor 3 was not installed by conflict resolution.
+5,62,getAllConflicts,,historical,HISTORICAL TEST 62 — List three RESOLVED conflicts for this scenario.
+5,63,getAllResolutions,,historical,HISTORICAL TEST 63 — List the three stored resolutions.
+5,64,getAllAcceptanceDecisions,,historical,HISTORICAL TEST 64 — List unchanged original ACCEPTED and REJECTED decisions.
+5,65,getAllContainmentIntervals,,historical,HISTORICAL TEST 65 — List containment intervals and ensure no rejected intervals were applied.
+6,1,createActor,tp26-actor,historical,HISTORICAL TEST 01 — Create actor for temporal-history tests.
+6,2,createAsset,tp26-motor,historical,HISTORICAL TEST 02 — Create first motor.
+6,3,createAsset,tp26-motor2,historical,HISTORICAL TEST 03 — Create second motor.
+6,4,createAsset,tp26-host,historical,HISTORICAL TEST 04 — Create host unit.
+6,5,createDigitalProductPassport,tp26-dpp,historical,HISTORICAL TEST 05 — Create DPP with existing root asset.
+6,6,submitEvent,tp26-install1,historical,HISTORICAL TEST 06 — Accept initial installation.
+6,7,readContainmentInterval,tp26-install1,historical,HISTORICAL TEST 07 — Read initial interval starting at 10:00.
+6,8,reconstructState,tp26-dpp,historical,HISTORICAL TEST 08 — Reconstruct state with motor installed after INSTALL.
+6,9,submitEvent,tp26-remove1,historical,HISTORICAL TEST 09 — Accept REMOVE at 12:00.
+6,10,readAcceptanceDecision,decision:tp26-remove1,obsolete_ledger_position,OBSOLETE LEDGER-POSITION TEST 10 — Capture the old logical ledgerPosition (obsolete in current build).
+6,11,reconstructState,tp26-dpp,historical,HISTORICAL TEST 11 — Reconstruct 12:30 state before correction: motor absent.
+6,12,submitEvent,tp26-correct-remove1,historical,HISTORICAL TEST 12 — Accept CORRECT moving REMOVE from 12:00 to 13:00.
+6,13,readAcceptanceDecision,decision:tp26-correct-remove1,obsolete_ledger_position,OBSOLETE LEDGER-POSITION TEST 13 — Capture correction logical ledgerPosition (obsolete in current build).
+6,14,reconstructState,tp26-dpp,historical,HISTORICAL TEST 14 — Reconstruct 12:30 state after correction: motor installed.
+6,15,,,obsolete_ledger_position,OBSOLETE LEDGER-POSITION TEST 15 — Reconstruct as known before correction (legacy as-of behavior).
+6,16,readContainmentInterval,tp26-install1,historical,HISTORICAL TEST 16 — Read the original interval with validTo=12:00.
+6,17,readLifecycleEvent,tp26-remove1,historical,HISTORICAL TEST 17 — Read the immutable original REMOVE event at 12:00.
+6,18,readLifecycleEvent,tp26-correct-remove1,historical,HISTORICAL TEST 18 — Read the CORRECT event with correctedEffectiveTime=13:00.
+6,19,readAcceptanceDecision,decision:tp26-correct-remove1,obsolete_ledger_position,OBSOLETE LEDGER-POSITION TEST 19 — Read the old acceptance decision containing logical ledgerPosition.
+6,20,submitEvent,tp26-correct-remove1,historical,HISTORICAL TEST 20 — Retry the identical CORRECT operation idempotently.
+6,21,submitEvent,tp26-bad-earlier,historical,HISTORICAL TEST 21 — Reject correction that would move REMOVE before INSTALL.
+6,22,readAcceptanceDecision,decision:tp26-bad-earlier,historical,HISTORICAL TEST 22 — Read the persisted REJECTED correction decision.
+6,23,reconstructState,tp26-dpp,historical,HISTORICAL TEST 23 — Confirm rejected correction did not modify reconstructed history.
+6,24,submitEvent,tp26-bad-unack,historical,HISTORICAL TEST 24 — Reject missing causal acknowledgment of prior correction.
+6,25,submitEvent,tp26-bad-unknown,historical,HISTORICAL TEST 25 — Reject correction referencing a nonexistent target event.
+6,26,submitEvent,tp26-bad-no-parent,historical,HISTORICAL TEST 26 — Reject correction missing causal recognition of its target.
+6,27,submitEvent,tp26-bad-type,historical,HISTORICAL TEST 27 — Reject incorrect docType in a CORRECT request.
+6,28,submitEvent,tp26-bad-missing,historical,HISTORICAL TEST 28 — Reject missing correctedEffectiveTime.
+6,29,submitEvent,tp26-correct-install1,historical,HISTORICAL TEST 29 — Accept CORRECT moving INSTALL from 10:00 to 11:00.
+6,30,reconstructState,tp26-dpp,historical,"HISTORICAL TEST 30 — At 10:30, reconstructed state has no installed motor."
+6,31,,,obsolete_ledger_position,OBSOLETE LEDGER-POSITION TEST 31 — Reconstruct state as known before INSTALL correction (legacy).
+6,32,reconstructState,tp26-dpp,historical,"HISTORICAL TEST 32 — At 11:30, reconstructed state includes the motor."
+6,33,submitEvent,tp26-correct-remove2,historical,HISTORICAL TEST 33 — Accept second correction moving REMOVE from 13:00 to 12:45.
+6,34,reconstructState,tp26-dpp,historical,"HISTORICAL TEST 34 — At 12:30, reconstructed state includes the motor."
+6,35,reconstructState,tp26-dpp,historical,"HISTORICAL TEST 35 — At 12:50, reconstructed state no longer includes the motor."
+6,36,submitEvent,tp26-overlap-install,historical,HISTORICAL TEST 36 — Reject an INSTALL that overlaps the corrected slot occupancy.
+6,37,readAcceptanceDecision,decision:tp26-overlap-install,historical,HISTORICAL TEST 37 — Read the persisted REJECTED overlap decision.
+6,38,readContainmentInterval,tp26-overlap-install,historical,HISTORICAL TEST 38 — Verify no interval was created for the rejected INSTALL.
+6,39,submitEvent,tp26-install-motor2,historical,HISTORICAL TEST 39 — Accept a new installation after the corrected removal.
+6,40,reconstructState,tp26-dpp,historical,HISTORICAL TEST 40 — Reconstruct 13:30 state showing motor 2.
+6,41,submitEvent,tp26-correct-remove-overlap,historical,HISTORICAL TEST 41 — Reject correction that would overlap the motor-2 interval.
+6,42,readAcceptanceDecision,decision:tp26-correct-remove-overlap,historical,HISTORICAL TEST 42 — Read persisted REJECTED correction decision.
+6,43,reconstructState,tp26-dpp,historical,HISTORICAL TEST 43 — Confirm unsuccessful correction leaves projection unchanged.
+6,44,,,obsolete_ledger_position,OBSOLETE LEDGER-POSITION TEST 44 — Reconstruct a previous ledger snapshot (legacy as-of behavior).
+6,45,,,obsolete_ledger_position,OBSOLETE LEDGER-POSITION TEST 45 — Reconstruct state at first correction position (legacy).
+6,46,reconstructState,tp26-dpp,historical,"HISTORICAL TEST 46 — At 12:30, current reconstruction includes original motor."
+6,47,reconstructState,tp26-dpp,historical,"HISTORICAL TEST 47 — At 10:30, current reconstruction shows no installed motor."
+6,48,reconstructState,tp26-dpp,obsolete_ledger_position,OBSOLETE LEDGER-POSITION TEST 48 — Reject a negative logical index (legacy validation).
+6,49,reconstructState,tp26-dpp,obsolete_ledger_position,OBSOLETE LEDGER-POSITION TEST 49 — Reject a future logical index (legacy validation).
+6,50,reconstructState,tp26-dpp,historical,HISTORICAL TEST 50 — Reject invalid ISO-8601 effective-time argument.
+6,51,reconstructState,unknown-dpp,historical,HISTORICAL TEST 51 — Reject reconstruction requested for a nonexistent DPP.
+6,52,submitEvent,tp26-inspection,historical,HISTORICAL TEST 52 — Accept inspection to prepare an unsupported correction target.
+6,53,submitEvent,tp26-correct-inspection,historical,HISTORICAL TEST 53 — Reject correction targeting INSPECT (not supported in prototype).
+6,54,getAllAcceptanceDecisions,,historical,HISTORICAL TEST 54 — List all acceptance decisions to inspect correction outcomes.
+7,1,createActor,link26-actor,historical,HISTORICAL TEST 01 — Create actor used in DPP–asset association tests.
+7,2,createAsset,link26-p1,historical,HISTORICAL TEST 02 — Create first product asset.
+7,3,createAsset,link26-p2,historical,HISTORICAL TEST 03 — Create second product asset.
+7,4,createAsset,link26-m1,historical,HISTORICAL TEST 04 — Create motor 1.
+7,5,createAsset,link26-m2,historical,HISTORICAL TEST 05 — Create motor 2.
+7,6,createAsset,link26-subhost,historical,HISTORICAL TEST 06 — Create nested host asset.
+7,7,createDigitalProductPassport,link26-bad-dpp,historical,HISTORICAL TEST 07 — Reject DPP whose rootAssetId does not exist.
+7,8,createDigitalProductPassport,link26-dpp1,historical,HISTORICAL TEST 08 — Create DPP for first product.
+7,9,createDigitalProductPassport,link26-dpp2,historical,HISTORICAL TEST 09 — Create DPP for second product.
+7,10,submitEvent,link26-bad-install,historical,HISTORICAL TEST 10 — Reject installation whose declared DPP is unrelated to its host.
+7,11,submitEvent,link26-install-p1,historical,HISTORICAL TEST 11 — Accept installation of motor 1 into product 1.
+7,12,readContainmentInterval,link26-install-p1,historical,HISTORICAL TEST 12 — Read accepted motor-1 interval.
+7,13,submitEvent,link26-bad-remove,historical,HISTORICAL TEST 13 — Reject removal that omits the original DPP association.
+7,14,reconstructState,link26-dpp1,historical,HISTORICAL TEST 14 — Reconstruct product 1 while motor 1 is installed.
+7,15,submitEvent,link26-remove-p1,historical,HISTORICAL TEST 15 — Accept removal of motor 1 from product 1.
+7,16,reconstructState,link26-dpp1,historical,HISTORICAL TEST 16 — Reconstruct product 1 after removal; historical interval stays closed.
+7,17,submitEvent,link26-inspect,historical,HISTORICAL TEST 17 — Accept PASSED inspection needed for reuse.
+7,18,submitEvent,link26-reuse,historical,HISTORICAL TEST 18 — Accept REUSE approval for motor 1.
+7,19,submitEvent,link26-install-p2,historical,HISTORICAL TEST 19 — Accept installation of motor 1 into product 2.
+7,20,reconstructState,link26-dpp1,historical,HISTORICAL TEST 20 — Reconstruct product 1 and confirm motor 1 is no longer active.
+7,21,reconstructState,link26-dpp2,historical,HISTORICAL TEST 21 — Reconstruct product 2 and confirm motor 1 is active.
+7,22,submitEvent,link26-bad-p2-install,historical,HISTORICAL TEST 22 — Reject installation claiming product 1 when host belongs to product 2.
+7,23,submitEvent,link26-install-subhost,historical,HISTORICAL TEST 23 — Accept installation of nested subassembly into product 1.
+7,24,submitEvent,link26-bad-nested,historical,HISTORICAL TEST 24 — Reject nested installation referencing the wrong DPP root.
+7,25,submitEvent,link26-install-nested,historical,HISTORICAL TEST 25 — Accept nested installation under the correct DPP.
+7,26,reconstructState,link26-dpp1,historical,HISTORICAL TEST 26 — Reconstruct product 1 with nested subassembly and motor 2.
+7,27,reconstructState,link26-dpp2,historical,"HISTORICAL TEST 27 — Reconstruct product 2, containing motor 1 only."
+8,1,createActor,gs26-actor-a,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — SUCCESS — create actor
+8,2,createActor,gs26-actor-b,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — SUCCESS — create actor
+8,3,createAsset,gs26-p1,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — SUCCESS — create asset
+8,4,createAsset,gs26-p2,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — SUCCESS — create asset
+8,5,createAsset,gs26-m1,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — SUCCESS — create asset
+8,6,createAsset,gs26-m2,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — SUCCESS — create asset
+8,7,createDigitalProductPassport,gs26-dpp1,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — SUCCESS — create DPP
+8,8,createDigitalProductPassport,gs26-dpp2,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — SUCCESS — create DPP
+8,9,submitEvent,gs26-inspect1,current_smoke_unverified,"CURRENT-SMOKE CANDIDATE — ACCEPTED — independent INSPECT, no global counter"
+8,10,readAcceptanceDecision,decision:gs26-inspect1,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — ACCEPTED; ledgerPosition should be absent (not a fabricated block number)
+8,11,submitEvent,gs26-inspect2,current_smoke_unverified,"CURRENT-SMOKE CANDIDATE — ACCEPTED — independent INSPECT, no global counter"
+8,12,readAcceptanceDecision,decision:gs26-inspect2,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — ACCEPTED; ledgerPosition should be absent (not a fabricated block number)
+8,13,submitEvent,gs26-install1,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — ACCEPTED — INSTALL
+8,14,reconstructState,gs26-dpp1,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — SUCCESS — 1 activeInterval; no asOfPosition/latestPosition
+8,15,submitEvent,gs26-remove1,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — ACCEPTED — REMOVE
+8,16,reconstructState,gs26-dpp1,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — SUCCESS — 0 activeIntervals
+8,17,reconstructState,gs26-dpp1,current_smoke_unverified,CURRENT-SMOKE CANDIDATE — EXPECTED ERROR 500 — historical as-of handled off-chain
