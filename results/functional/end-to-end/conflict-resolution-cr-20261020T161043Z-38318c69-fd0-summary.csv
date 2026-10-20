@@ -1,0 +1,16 @@
+Test ID,Scenario,Expected HTTP,Observed HTTP,Expected detail,Observed result,Status
+C001,API health,200,200,,UP (Fabric connectivity not checked),PASS
+C002,Create actor A,201,201,VALID,VALID / created actor A,PASS
+C003,Create actor B,201,201,VALID,VALID / created actor B,PASS
+C004,Create host asset,201,201,VALID,VALID / created host asset,PASS
+C005,Create motor asset,201,201,VALID,VALID / created motor asset,PASS
+C006,Create passport,201,201,VALID,VALID / created DPP,PASS
+C007,Inspection PASSED by actor A,201,201,"VALID, ACCEPTED",VALID / ACCEPTED (PASSED inspection),PASS
+C008,Inspection FAILED by actor B,201,201,"VALID, REJECTED",VALID / REJECTED (concurrent FAILED inspection),PASS
+C009,Read accepted decision,200,200,ACCEPTED,ACCEPTED,PASS
+C010,Read rejected decision,200,200,REJECTED,REJECTED,PASS
+C011,Read causal conflict,200,200,"PENDING, two eventIds",PENDING / 2 conflicting events,PASS
+C012,Resolve causal conflict,201,201,VALID,VALID / ACCEPT_EVENT,PASS
+C013,Read resolution,200,200,ACCEPT_EVENT,ACCEPT_EVENT,PASS
+C014,Read resolved conflict,200,200,RESOLVED,RESOLVED / resolution linked,PASS
+C015,Verify rejected decision unchanged,200,200,REJECTED,REJECTED (preserved),PASS
