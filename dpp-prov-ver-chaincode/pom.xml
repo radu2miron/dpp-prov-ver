@@ -6,7 +6,7 @@
 
     <groupId>edu.tucn.dppprovver</groupId>
     <artifactId>dpp-prov-ver-chaincode</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <properties>

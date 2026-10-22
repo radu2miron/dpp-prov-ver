@@ -12,7 +12,7 @@
 
     <groupId>edu.tucn.dppprovver</groupId>
     <artifactId>dpp-prov-ver-api</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
     <name>dpp-prov-ver-api</name>
     <description>Synchronous Hyperledger Fabric Gateway API for DPP-Prov-Ver</description>
 

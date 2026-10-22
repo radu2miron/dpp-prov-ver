@@ -8,7 +8,7 @@ The chaincode is responsible for managing LifecycleEvents.
 1.1. Build dpp-prov-ver-chaincode:
 ```mvn clean install```
 
-1.2. Copy ```target/dpp-prov-ver-chaincode-0.0.1.tar.gz``` to ```../fabric/test-network/dpp-prov-ver-chaincode-0.0.1.tar.gz```
+1.2. Copy ```target/dpp-prov-ver-chaincode-1.0.0.tar.gz``` to ```../fabric/test-network/dpp-prov-ver-chaincode-1.0.0.tar.gz```
 
 ### 2. Open terminal and run the following commands to set up the environment variables:
 ```
@@ -34,7 +34,7 @@ export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org1.e
 export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
 export CORE_PEER_ADDRESS=localhost:7051
 
-peer lifecycle chaincode install dpp-prov-ver-chaincode-0.0.1.tar.gz
+peer lifecycle chaincode install dpp-prov-ver-chaincode-1.0.0.tar.gz
 ```
 
 4.2. Install chaincode on Org2 peer
@@ -44,14 +44,14 @@ export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org2.e
 export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
 export CORE_PEER_ADDRESS=localhost:9051
 
-peer lifecycle chaincode install dpp-prov-ver-chaincode-0.0.1.tar.gz
+peer lifecycle chaincode install dpp-prov-ver-chaincode-1.0.0.tar.gz
 ```
 
 ### 5. Approve chaincode definition
 5.1. Setup chaincode environment variables
 ```
 peer lifecycle chaincode queryinstalled
-export CC_PACKAGE_ID=<REPLACE WITH PACKAGE ID, E.G. dpp-prov-ver-chaincode-0.0.1:69de748301770f6ef64b42aa6bb6cb291df20aa39542c3ef94008615704007f3>
+export CC_PACKAGE_ID=<REPLACE WITH PACKAGE ID, E.G. dpp-prov-ver-chaincode-1.0.0:69de748301770f6ef64b42aa6bb6cb291df20aa39542c3ef94008615704007f3>
 ```
 
 5.2. Approve chaincode for Org2 - env. variables already setup for this org at previous step
