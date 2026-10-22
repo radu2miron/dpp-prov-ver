@@ -1,0 +1,141 @@
+{
+  "jtl": "results/performance/perf-conflict-rate-20261021T205208Z-25626ea2.jtl",
+  "fixture": "results/performance/perf-conflict-rate-20261021T205208Z-25626ea2-conflict-rate-data.csv",
+  "samples": 100,
+  "fixture_rows": 100,
+  "http_status_counts": {
+    "201": 90,
+    "409": 6,
+    "422": 4
+  },
+  "classified_outcomes": {
+    "ACCEPTED": 90,
+    "MVCC_READ_CONFLICT": 6,
+    "UNEXPECTED": 4
+  },
+  "missing_event_ids": [],
+  "unexpected_event_ids": [],
+  "unexpected_http_or_classifications": [
+    {
+      "eventId": "perf-conflict-rate-20261021T205208Z-25626ea2-install-0012",
+      "groupId": "pair-006",
+      "slotId": "contested-006",
+      "contended": "1",
+      "http": "422",
+      "fabricStatus": "",
+      "validationCode": "",
+      "fabricError": "FABRIC_ENDORSE",
+      "fabricStage": "ENDORSE",
+      "fabricMessage": "io.grpc.StatusRuntimeException: ABORTED: failed to collect enough transaction endorsements  see attached details for more info",
+      "responseMessage": "Unexpected contested INSTALL outcome: HTTP 422; status=; semantic=; validation=; id=; error=FABRIC_ENDORSE; stage=ENDORSE; message=io.grpc.StatusRuntimeException: ABORTED: failed to collect enough transaction endorsements  see attached details for more info"
+    },
+    {
+      "eventId": "perf-conflict-rate-20261021T205208Z-25626ea2-install-0013",
+      "groupId": "pair-007",
+      "slotId": "contested-007",
+      "contended": "1",
+      "http": "422",
+      "fabricStatus": "",
+      "validationCode": "",
+      "fabricError": "FABRIC_ENDORSE",
+      "fabricStage": "ENDORSE",
+      "fabricMessage": "io.grpc.StatusRuntimeException: ABORTED: failed to collect enough transaction endorsements  see attached details for more info",
+      "responseMessage": "Unexpected contested INSTALL outcome: HTTP 422; status=; semantic=; validation=; id=; error=FABRIC_ENDORSE; stage=ENDORSE; message=io.grpc.StatusRuntimeException: ABORTED: failed to collect enough transaction endorsements  see attached details for more info"
+    },
+    {
+      "eventId": "perf-conflict-rate-20261021T205208Z-25626ea2-install-0006",
+      "groupId": "pair-003",
+      "slotId": "contested-003",
+      "contended": "1",
+      "http": "422",
+      "fabricStatus": "",
+      "validationCode": "",
+      "fabricError": "FABRIC_ENDORSE",
+      "fabricStage": "ENDORSE",
+      "fabricMessage": "io.grpc.StatusRuntimeException: ABORTED: failed to collect enough transaction endorsements  see attached details for more info",
+      "responseMessage": "Unexpected contested INSTALL outcome: HTTP 422; status=; semantic=; validation=; id=; error=FABRIC_ENDORSE; stage=ENDORSE; message=io.grpc.StatusRuntimeException: ABORTED: failed to collect enough transaction endorsements  see attached details for more info"
+    },
+    {
+      "eventId": "perf-conflict-rate-20261021T205208Z-25626ea2-install-0008",
+      "groupId": "pair-004",
+      "slotId": "contested-004",
+      "contended": "1",
+      "http": "422",
+      "fabricStatus": "",
+      "validationCode": "",
+      "fabricError": "FABRIC_ENDORSE",
+      "fabricStage": "ENDORSE",
+      "fabricMessage": "io.grpc.StatusRuntimeException: ABORTED: failed to collect enough transaction endorsements  see attached details for more info",
+      "responseMessage": "Unexpected contested INSTALL outcome: HTTP 422; status=; semantic=; validation=; id=; error=FABRIC_ENDORSE; stage=ENDORSE; message=io.grpc.StatusRuntimeException: ABORTED: failed to collect enough transaction endorsements  see attached details for more info"
+    }
+  ],
+  "group_mismatches": [
+    {
+      "group": "pair-003",
+      "contested": true,
+      "outcomes": [
+        "ACCEPTED",
+        "UNEXPECTED"
+      ],
+      "events": [
+        "perf-conflict-rate-20261021T205208Z-25626ea2-install-0005",
+        "perf-conflict-rate-20261021T205208Z-25626ea2-install-0006"
+      ]
+    },
+    {
+      "group": "pair-004",
+      "contested": true,
+      "outcomes": [
+        "UNEXPECTED",
+        "ACCEPTED"
+      ],
+      "events": [
+        "perf-conflict-rate-20261021T205208Z-25626ea2-install-0008",
+        "perf-conflict-rate-20261021T205208Z-25626ea2-install-0007"
+      ]
+    },
+    {
+      "group": "pair-006",
+      "contested": true,
+      "outcomes": [
+        "UNEXPECTED",
+        "ACCEPTED"
+      ],
+      "events": [
+        "perf-conflict-rate-20261021T205208Z-25626ea2-install-0012",
+        "perf-conflict-rate-20261021T205208Z-25626ea2-install-0011"
+      ]
+    },
+    {
+      "group": "pair-007",
+      "contested": true,
+      "outcomes": [
+        "ACCEPTED",
+        "UNEXPECTED"
+      ],
+      "events": [
+        "perf-conflict-rate-20261021T205208Z-25626ea2-install-0014",
+        "perf-conflict-rate-20261021T205208Z-25626ea2-install-0013"
+      ]
+    }
+  ],
+  "ledger_state": {
+    "active_intervals": 90,
+    "unique_slots": 90,
+    "unique_components": 90,
+    "matches_jtl_accepted_ids": true,
+    "structurally_consistent_with_reported_accepts": true
+  },
+  "ledger_decisions": {
+    "accepted": 90,
+    "rejected": 0,
+    "total": 90,
+    "no_decision_for_unexpected": {
+      "perf-conflict-rate-20261021T205208Z-25626ea2-install-0012": true,
+      "perf-conflict-rate-20261021T205208Z-25626ea2-install-0013": true,
+      "perf-conflict-rate-20261021T205208Z-25626ea2-install-0006": true,
+      "perf-conflict-rate-20261021T205208Z-25626ea2-install-0008": true
+    }
+  },
+  "status": "UNVERIFIED_FAILURE"
+}

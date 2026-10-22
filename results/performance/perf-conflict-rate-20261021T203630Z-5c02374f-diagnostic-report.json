@@ -1,0 +1,63 @@
+{
+  "jtl": "results/performance/perf-conflict-rate-20261021T203630Z-5c02374f.jtl",
+  "fixture": "results/performance/perf-conflict-rate-20261021T203630Z-5c02374f-conflict-rate-data.csv",
+  "samples": 100,
+  "fixture_rows": 100,
+  "http_status_counts": {
+    "201": 95,
+    "409": 4,
+    "422": 1
+  },
+  "classified_outcomes": {
+    "ACCEPTED": 95,
+    "MVCC_READ_CONFLICT": 4,
+    "UNEXPECTED": 1
+  },
+  "missing_event_ids": [],
+  "unexpected_event_ids": [],
+  "unexpected_http_or_classifications": [
+    {
+      "eventId": "perf-conflict-rate-20261021T203630Z-5c02374f-install-0002",
+      "groupId": "pair-001",
+      "slotId": "contested-001",
+      "contended": "1",
+      "http": "422",
+      "fabricStatus": "",
+      "validationCode": "",
+      "fabricError": null,
+      "fabricStage": null,
+      "fabricMessage": null,
+      "responseMessage": "Unexpected contested INSTALL outcome: HTTP 422; status=; semantic=; validation=; id=; error=FABRIC_ENDORSE"
+    }
+  ],
+  "group_mismatches": [
+    {
+      "group": "pair-001",
+      "contested": true,
+      "outcomes": [
+        "UNEXPECTED",
+        "ACCEPTED"
+      ],
+      "events": [
+        "perf-conflict-rate-20261021T203630Z-5c02374f-install-0002",
+        "perf-conflict-rate-20261021T203630Z-5c02374f-install-0001"
+      ]
+    }
+  ],
+  "ledger_state": {
+    "active_intervals": 95,
+    "unique_slots": 95,
+    "unique_components": 95,
+    "matches_jtl_accepted_ids": true,
+    "structurally_consistent_with_reported_accepts": true
+  },
+  "ledger_decisions": {
+    "accepted": 95,
+    "rejected": 0,
+    "total": 95,
+    "no_decision_for_unexpected": {
+      "perf-conflict-rate-20261021T203630Z-5c02374f-install-0002": true
+    }
+  },
+  "status": "UNVERIFIED_FAILURE"
+}

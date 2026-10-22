@@ -1,0 +1,334 @@
+<?xml version='1.0' encoding='utf-8'?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="DPP I7 — exact retry and operation ID collision" enabled="true">
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments" />
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath" />
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Sequential: original, byte-identical retry, changed payload same operationId" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">0</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="JSON header" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree />
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="IDEMPOTENCY 1 - first INSTALL" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{"docType":"LIFECYCLE_EVENT","id":"${__P(seqEventId)}","operationId":"${__P(seqOperationId)}","type":"INSTALL","actorId":"${__P(seqActorId)}","dppIds":["${__P(seqDppId)}"],"affectedAssetIds":["${__P(seqHostId)}","${__P(seqComponentId)}"],"parentEventIds":[],"effectiveTime":"${__P(effectiveAt)}","issuedAt":"${__P(issuedAt)}","data":{"componentId":"${__P(seqComponentId)}","hostId":"${__P(seqHostId)}","slotId":"${__P(seqSlotId)}"}}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${__P(host,localhost)}</stringProp>
+          <stringProp name="HTTPSampler.port">${__P(port,8081)}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${__P(protocol,http)}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
+          <stringProp name="HTTPSampler.path">/api/events</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <stringProp name="HTTPSampler.connect_timeout">10000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">120000</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Capture response and phase metadata" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters" />
+            <stringProp name="filename" />
+            <stringProp name="cacheKey">dpp-idempotency-seq-first-v1</stringProp>
+            <stringProp name="script">import groovy.json.JsonSlurper
+vars.put('idempotencyCase', 'seq-first')
+vars.put('eventId', props.get('seqEventId') ?: '')
+vars.put('fabricStatus', '')
+vars.put('semanticOutcome', '')
+vars.put('validationCode', '')
+vars.put('fabricError', '')
+vars.put('fabricStage', '')
+vars.put('fabricMessage', '')
+try {
+    def body = new JsonSlurper().parseText(prev.getResponseDataAsString())
+    String code = prev.getResponseCode()
+    String status = (body.fabricStatus ?: '').toString()
+    String semantic = (body.semanticOutcome ?: '').toString()
+    String validation = (body.validationCode ?: '').toString()
+    String ferr = (body.error ?: '').toString()
+    String stage = (body.stage ?: '').toString()
+    String message = (body.message ?: '').toString().replaceAll(/[\r\n\t,]+/, ' ').take(450)
+    vars.put('fabricStatus', status)
+    vars.put('semanticOutcome', semantic)
+    vars.put('validationCode', validation)
+    vars.put('fabricError', ferr)
+    vars.put('fabricStage', stage)
+    vars.put('fabricMessage', message)
+    // Actual classification and final PASS are performed by Python using
+    // JTL + persisted event/decision lists + effective-time state.
+    boolean accepted = code == '201' &amp;&amp; body.id?.toString() == vars.get('eventId') &amp;&amp; status == 'VALID' &amp;&amp; semantic == 'ACCEPTED'
+    boolean mvcc = code == '409' &amp;&amp; validation == 'MVCC_READ_CONFLICT'
+    boolean collision = code == '422' &amp;&amp; ferr == 'FABRIC_ENDORSE'
+    prev.setSuccessful(accepted || mvcc || collision)
+    if (!prev.isSuccessful()) prev.setResponseMessage('Unclassified response: HTTP ' + code + '; error=' + ferr + '; message=' + message)
+} catch (Exception e) {
+    prev.setSuccessful(false)
+    prev.setResponseMessage('Invalid JSON response: ' + e.getMessage())
+}</stringProp>
+          </JSR223PostProcessor>
+          <hashTree />
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="IDEMPOTENCY 2 - exact sequential replay" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{"docType":"LIFECYCLE_EVENT","id":"${__P(seqEventId)}","operationId":"${__P(seqOperationId)}","type":"INSTALL","actorId":"${__P(seqActorId)}","dppIds":["${__P(seqDppId)}"],"affectedAssetIds":["${__P(seqHostId)}","${__P(seqComponentId)}"],"parentEventIds":[],"effectiveTime":"${__P(effectiveAt)}","issuedAt":"${__P(issuedAt)}","data":{"componentId":"${__P(seqComponentId)}","hostId":"${__P(seqHostId)}","slotId":"${__P(seqSlotId)}"}}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${__P(host,localhost)}</stringProp>
+          <stringProp name="HTTPSampler.port">${__P(port,8081)}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${__P(protocol,http)}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
+          <stringProp name="HTTPSampler.path">/api/events</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <stringProp name="HTTPSampler.connect_timeout">10000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">120000</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Capture response and phase metadata" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters" />
+            <stringProp name="filename" />
+            <stringProp name="cacheKey">dpp-idempotency-seq-replay-v1</stringProp>
+            <stringProp name="script">import groovy.json.JsonSlurper
+vars.put('idempotencyCase', 'seq-replay')
+vars.put('eventId', props.get('seqEventId') ?: '')
+vars.put('fabricStatus', '')
+vars.put('semanticOutcome', '')
+vars.put('validationCode', '')
+vars.put('fabricError', '')
+vars.put('fabricStage', '')
+vars.put('fabricMessage', '')
+try {
+    def body = new JsonSlurper().parseText(prev.getResponseDataAsString())
+    String code = prev.getResponseCode()
+    String status = (body.fabricStatus ?: '').toString()
+    String semantic = (body.semanticOutcome ?: '').toString()
+    String validation = (body.validationCode ?: '').toString()
+    String ferr = (body.error ?: '').toString()
+    String stage = (body.stage ?: '').toString()
+    String message = (body.message ?: '').toString().replaceAll(/[\r\n\t,]+/, ' ').take(450)
+    vars.put('fabricStatus', status)
+    vars.put('semanticOutcome', semantic)
+    vars.put('validationCode', validation)
+    vars.put('fabricError', ferr)
+    vars.put('fabricStage', stage)
+    vars.put('fabricMessage', message)
+    // Actual classification and final PASS are performed by Python using
+    // JTL + persisted event/decision lists + effective-time state.
+    boolean accepted = code == '201' &amp;&amp; body.id?.toString() == vars.get('eventId') &amp;&amp; status == 'VALID' &amp;&amp; semantic == 'ACCEPTED'
+    boolean mvcc = code == '409' &amp;&amp; validation == 'MVCC_READ_CONFLICT'
+    boolean collision = code == '422' &amp;&amp; ferr == 'FABRIC_ENDORSE'
+    prev.setSuccessful(accepted || mvcc || collision)
+    if (!prev.isSuccessful()) prev.setResponseMessage('Unclassified response: HTTP ' + code + '; error=' + ferr + '; message=' + message)
+} catch (Exception e) {
+    prev.setSuccessful(false)
+    prev.setResponseMessage('Invalid JSON response: ' + e.getMessage())
+}</stringProp>
+          </JSR223PostProcessor>
+          <hashTree />
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="IDEMPOTENCY 3 - operationId reused with changed payload" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{"docType":"LIFECYCLE_EVENT","id":"${__P(seqMutationEventId)}","operationId":"${__P(seqOperationId)}","type":"INSTALL","actorId":"${__P(seqActorId)}","dppIds":["${__P(seqDppId)}"],"affectedAssetIds":["${__P(seqHostId)}","${__P(seqComponentId)}"],"parentEventIds":[],"effectiveTime":"${__P(effectiveAt)}","issuedAt":"${__P(issuedAt)}","data":{"componentId":"${__P(seqComponentId)}","hostId":"${__P(seqHostId)}","slotId":"${__P(seqMutationSlotId)}"}}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${__P(host,localhost)}</stringProp>
+          <stringProp name="HTTPSampler.port">${__P(port,8081)}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${__P(protocol,http)}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
+          <stringProp name="HTTPSampler.path">/api/events</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <stringProp name="HTTPSampler.connect_timeout">10000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">120000</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Capture response and phase metadata" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters" />
+            <stringProp name="filename" />
+            <stringProp name="cacheKey">dpp-idempotency-seq-mutated-v1</stringProp>
+            <stringProp name="script">import groovy.json.JsonSlurper
+vars.put('idempotencyCase', 'seq-mutated')
+vars.put('eventId', props.get('seqMutationEventId') ?: '')
+vars.put('fabricStatus', '')
+vars.put('semanticOutcome', '')
+vars.put('validationCode', '')
+vars.put('fabricError', '')
+vars.put('fabricStage', '')
+vars.put('fabricMessage', '')
+try {
+    def body = new JsonSlurper().parseText(prev.getResponseDataAsString())
+    String code = prev.getResponseCode()
+    String status = (body.fabricStatus ?: '').toString()
+    String semantic = (body.semanticOutcome ?: '').toString()
+    String validation = (body.validationCode ?: '').toString()
+    String ferr = (body.error ?: '').toString()
+    String stage = (body.stage ?: '').toString()
+    String message = (body.message ?: '').toString().replaceAll(/[\r\n\t,]+/, ' ').take(450)
+    vars.put('fabricStatus', status)
+    vars.put('semanticOutcome', semantic)
+    vars.put('validationCode', validation)
+    vars.put('fabricError', ferr)
+    vars.put('fabricStage', stage)
+    vars.put('fabricMessage', message)
+    // Actual classification and final PASS are performed by Python using
+    // JTL + persisted event/decision lists + effective-time state.
+    boolean accepted = code == '201' &amp;&amp; body.id?.toString() == vars.get('eventId') &amp;&amp; status == 'VALID' &amp;&amp; semantic == 'ACCEPTED'
+    boolean mvcc = code == '409' &amp;&amp; validation == 'MVCC_READ_CONFLICT'
+    boolean collision = code == '422' &amp;&amp; ferr == 'FABRIC_ENDORSE'
+    prev.setSuccessful(accepted || mvcc || collision)
+    if (!prev.isSuccessful()) prev.setResponseMessage('Unclassified response: HTTP ' + code + '; error=' + ferr + '; message=' + message)
+} catch (Exception e) {
+    prev.setSuccessful(false)
+    prev.setResponseMessage('Invalid JSON response: ' + e.getMessage())
+}</stringProp>
+          </JSR223PostProcessor>
+          <hashTree />
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Concurrent: two identical INSTALLs with shared eventId and operationId" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">2</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">0</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="JSON header" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree />
+        <SyncTimer guiclass="TestBeanGUI" testclass="SyncTimer" testname="Release two exact duplicates together" enabled="true">
+          <intProp name="groupSize">2</intProp>
+          <longProp name="timeoutInMs">15000</longProp>
+        </SyncTimer>
+        <hashTree />
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="IDEMPOTENCY 4 - synchronized exact duplicates" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{"docType":"LIFECYCLE_EVENT","id":"${__P(raceEventId)}","operationId":"${__P(raceOperationId)}","type":"INSTALL","actorId":"${__P(raceActorId)}","dppIds":["${__P(raceDppId)}"],"affectedAssetIds":["${__P(raceHostId)}","${__P(raceComponentId)}"],"parentEventIds":[],"effectiveTime":"${__P(effectiveAt)}","issuedAt":"${__P(issuedAt)}","data":{"componentId":"${__P(raceComponentId)}","hostId":"${__P(raceHostId)}","slotId":"${__P(raceSlotId)}"}}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${__P(host,localhost)}</stringProp>
+          <stringProp name="HTTPSampler.port">${__P(port,8081)}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${__P(protocol,http)}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
+          <stringProp name="HTTPSampler.path">/api/events</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <stringProp name="HTTPSampler.connect_timeout">10000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">120000</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Capture response and phase metadata" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters" />
+            <stringProp name="filename" />
+            <stringProp name="cacheKey">dpp-idempotency-race-v1</stringProp>
+            <stringProp name="script">import groovy.json.JsonSlurper
+vars.put('idempotencyCase', 'race')
+vars.put('eventId', props.get('raceEventId') ?: '')
+vars.put('fabricStatus', '')
+vars.put('semanticOutcome', '')
+vars.put('validationCode', '')
+vars.put('fabricError', '')
+vars.put('fabricStage', '')
+vars.put('fabricMessage', '')
+try {
+    def body = new JsonSlurper().parseText(prev.getResponseDataAsString())
+    String code = prev.getResponseCode()
+    String status = (body.fabricStatus ?: '').toString()
+    String semantic = (body.semanticOutcome ?: '').toString()
+    String validation = (body.validationCode ?: '').toString()
+    String ferr = (body.error ?: '').toString()
+    String stage = (body.stage ?: '').toString()
+    String message = (body.message ?: '').toString().replaceAll(/[\r\n\t,]+/, ' ').take(450)
+    vars.put('fabricStatus', status)
+    vars.put('semanticOutcome', semantic)
+    vars.put('validationCode', validation)
+    vars.put('fabricError', ferr)
+    vars.put('fabricStage', stage)
+    vars.put('fabricMessage', message)
+    // Actual classification and final PASS are performed by Python using
+    // JTL + persisted event/decision lists + effective-time state.
+    boolean accepted = code == '201' &amp;&amp; body.id?.toString() == vars.get('eventId') &amp;&amp; status == 'VALID' &amp;&amp; semantic == 'ACCEPTED'
+    boolean mvcc = code == '409' &amp;&amp; validation == 'MVCC_READ_CONFLICT'
+    boolean collision = code == '422' &amp;&amp; ferr == 'FABRIC_ENDORSE'
+    prev.setSuccessful(accepted || mvcc || collision)
+    if (!prev.isSuccessful()) prev.setResponseMessage('Unclassified response: HTTP ' + code + '; error=' + ferr + '; message=' + message)
+} catch (Exception e) {
+    prev.setSuccessful(false)
+    prev.setResponseMessage('Invalid JSON response: ' + e.getMessage())
+}</stringProp>
+          </JSR223PostProcessor>
+          <hashTree />
+        </hashTree>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

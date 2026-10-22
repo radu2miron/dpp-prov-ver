@@ -23,13 +23,15 @@ The model uses persistent `Asset` identities, `LifecycleEvent` assertions, `Cont
 | Component | Technology / role |
 | --- | --- |
 | Permissioned blockchain | Hyperledger Fabric 2.5.x, two-organization test network |
-| Smart contracts | Java 21 chaincode, Fabric Java Contract API |
+| Smart contracts | Java 21 chaincode, Fabric Java Contract API — **dpp-prov-ver-chaincode** |
 | State database | CouchDB |
 | Build | Maven |
 | Contract facade | `edu.tucn.dppprovver.contract.DppProvVerContract` |
-| Client API | Spring Boot / Fabric Gateway integration — **planned for this repository** |
-| Load testing | Apache JMeter — **experimental artifacts to be published** |
-| Historical projection | Commit-ordered index derived from Fabric block events — **planned** |
+| Client API | Spring Boot / Fabric Gateway integration — **dpp-prov-ver-api** |
+| Functional testing | chaincode-only & end-to-end — **tests/functional** & **results/functiona** |
+| Concurrency testing | end-to-end — **tests/concurrency** & **results/concurrency** |
+| Load testing | Apache JMeter — end-to-end — **tests/performance** & **results/performance** |
+| Historical projection | Commit-ordered index derived from Fabric block events |
 
 The chaincode separates each entity's persistence service from the contract facade. The principal lifecycle entry point is `submitEvent()`. Implemented lifecycle processing covers `INSTALL`, `REMOVE`, `INSPECT`, `REPAIR`, `REUSE`, and the supported form of `CORRECT`; unsupported enum values should not be interpreted as implemented operations.
 

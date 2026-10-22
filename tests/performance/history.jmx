@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='utf-8'?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="DPP performance — HISTORY (latest effective-time reconstruction)" enabled="true">
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments" />
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath" />
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="HISTORY reconstruction load" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">${__P(loops,-1)}</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(threads,10)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(rampUp,10)}</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">${__P(duration,60)}</stringProp>
+        <stringProp name="ThreadGroup.delay">0</stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Accept JSON" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Accept</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree />
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HISTORY — reconstructState (asOfPosition=0)" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="effectiveTime" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                <stringProp name="Argument.name">effectiveTime</stringProp>
+                <stringProp name="Argument.value">${__P(historyTime,1970-01-01T00:00:00Z)}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+              <elementProp name="asOfPosition" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                <stringProp name="Argument.name">asOfPosition</stringProp>
+                <stringProp name="Argument.value">${__P(historyAsOf,0)}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${__P(host,localhost)}</stringProp>
+          <stringProp name="HTTPSampler.port">${__P(port,8081)}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${__P(protocol,http)}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
+          <stringProp name="HTTPSampler.path">/api/passports/${__P(historyDppPrefix,missing-)}${__threadNum}/state</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <stringProp name="HTTPSampler.connect_timeout">10000</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">120000</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Validate latest temporal reconstruction (DPP ID, intervals, time)" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters" />
+            <stringProp name="filename" />
+            <stringProp name="cacheKey">dpp-perf-history-classifier-v1</stringProp>
+            <stringProp name="script">import groovy.json.JsonSlurper
+// Latest effective-time reconstruction, no commit, no as-known-at cutoff.
+vars.put('fabricStatus', '')
+vars.put('semanticOutcome', '')
+vars.put('validationCode', '')
+vars.put('historyStatus', 'FAILED')
+try {
+    def body = new JsonSlurper().parseText(prev.getResponseDataAsString())
+    String expectedId = props.get('historyDppPrefix') + ctx.getThreadNum().plus(1).toString()
+    String expectedHost = props.get('historyHostPrefix') + ctx.getThreadNum().plus(1).toString()
+    String expectedTime = props.get('historyTime')
+    int expectedActive = (props.get('historyExpectedActive') ?: '-1') as int
+    int expectedIntervals = (props.get('historyExpectedIntervals') ?: '-1') as int
+    boolean valid = prev.getResponseCode() == '200' &amp;&amp; body instanceof Map &amp;&amp;
+        body.dppId?.toString() == expectedId &amp;&amp;
+        body.activeIntervals instanceof List &amp;&amp; body.intervals instanceof List &amp;&amp;
+        body.activeIntervals.size() == expectedActive &amp;&amp;
+        body.intervals.size() == expectedIntervals &amp;&amp;
+        body.activeIntervals.every { it.hostId?.toString() == expectedHost } &amp;&amp;
+        body.intervals.every { it.hostId?.toString() == expectedHost } &amp;&amp;
+        java.time.Instant.parse(body.effectiveTime?.toString()) ==
+            java.time.Instant.parse(expectedTime)
+    vars.put('historyStatus', valid ? 'MATCH' : 'MISMATCH')
+    if (!valid) {
+        prev.setSuccessful(false)
+        prev.setResponseMessage('Unexpected historical state: HTTP ' + prev.getResponseCode() +
+            '; DPP ' + expectedId + '; expected ' + expectedActive + '/' + expectedIntervals +
+            ' active/all intervals; got ' + body.activeIntervals?.size() + '/' +
+            body.intervals?.size())
+    }
+} catch (Exception e) {
+    prev.setSuccessful(false)
+    vars.put('historyStatus', 'INVALID_JSON')
+    prev.setResponseMessage('Historical state parse error: ' + e.getClass().getSimpleName() +
+        ': ' + e.getMessage())
+}</stringProp>
+          </JSR223PostProcessor>
+          <hashTree />
+        </hashTree>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

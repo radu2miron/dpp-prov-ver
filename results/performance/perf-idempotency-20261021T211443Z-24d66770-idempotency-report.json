@@ -1,0 +1,99 @@
+{
+  "run_id": "perf-idempotency-20261021T211443Z-24d66770",
+  "mode": "idempotency",
+  "status": "CONSISTENCY_PASS_CAUSE_UNVERIFIED",
+  "scenario": "sequential first + exact replay + same operationId modified payload; concurrent exact duplicate",
+  "requests": 5,
+  "outcomes": {
+    "seq-first": [
+      {
+        "http": "201",
+        "eventId": "perf-idempotency-20261021T211443Z-24d66770-seq-install",
+        "fabricStatus": "VALID",
+        "semanticOutcome": "ACCEPTED",
+        "validationCode": "",
+        "fabricError": "",
+        "fabricStage": "",
+        "fabricMessage": "Lifecycle decision committed",
+        "latencyMs": 626
+      }
+    ],
+    "seq-replay": [
+      {
+        "http": "201",
+        "eventId": "perf-idempotency-20261021T211443Z-24d66770-seq-install",
+        "fabricStatus": "VALID",
+        "semanticOutcome": "ACCEPTED",
+        "validationCode": "",
+        "fabricError": "",
+        "fabricStage": "",
+        "fabricMessage": "Lifecycle decision committed",
+        "latencyMs": 541
+      }
+    ],
+    "seq-mutated": [
+      {
+        "http": "422",
+        "eventId": "perf-idempotency-20261021T211443Z-24d66770-seq-changed-payload",
+        "fabricStatus": "",
+        "semanticOutcome": "",
+        "validationCode": "",
+        "fabricError": "FABRIC_ENDORSE",
+        "fabricStage": "ENDORSE",
+        "fabricMessage": "io.grpc.StatusRuntimeException: ABORTED: failed to endorse transaction  see attached details for more info",
+        "latencyMs": 8
+      }
+    ],
+    "race": [
+      {
+        "http": "409",
+        "eventId": "perf-idempotency-20261021T211443Z-24d66770-race-install",
+        "fabricStatus": "",
+        "semanticOutcome": "",
+        "validationCode": "MVCC_READ_CONFLICT",
+        "fabricError": "FABRIC_COMMIT",
+        "fabricStage": "COMMIT",
+        "fabricMessage": "Commit of transaction 51151b624c85d2f42c05c3232be8630c0de84bbe200109e17a32d74bfbd95d87 failed with status code 11 (MVCC_READ_CONFLICT)",
+        "latencyMs": 573
+      },
+      {
+        "http": "201",
+        "eventId": "perf-idempotency-20261021T211443Z-24d66770-race-install",
+        "fabricStatus": "VALID",
+        "semanticOutcome": "ACCEPTED",
+        "validationCode": "",
+        "fabricError": "",
+        "fabricStage": "",
+        "fabricMessage": "Lifecycle decision committed",
+        "latencyMs": 573
+      }
+    ]
+  },
+  "ledger": {
+    "events": {
+      "perf-idempotency-20261021T211443Z-24d66770-seq-install": 1,
+      "perf-idempotency-20261021T211443Z-24d66770-race-install": 1,
+      "perf-idempotency-20261021T211443Z-24d66770-seq-changed-payload": 0
+    },
+    "decisions": {
+      "perf-idempotency-20261021T211443Z-24d66770-seq-install": 1,
+      "perf-idempotency-20261021T211443Z-24d66770-race-install": 1,
+      "perf-idempotency-20261021T211443Z-24d66770-seq-changed-payload": 0
+    },
+    "seq_state": {
+      "dppId": "perf-idempotency-20261021T211443Z-24d66770-seq-dpp",
+      "active_count": 1,
+      "history_count": 1
+    },
+    "race_state": {
+      "dppId": "perf-idempotency-20261021T211443Z-24d66770-race-dpp",
+      "active_count": 1,
+      "history_count": 1
+    }
+  },
+  "problems": [],
+  "unknown_endorsement_causes": [
+    "Mutated payload blocked at ENDORSE, but chaincode reason unavailable"
+  ],
+  "timing_note": "Five functional requests in sequential and synchronized groups, not a throughput benchmark"
+}
