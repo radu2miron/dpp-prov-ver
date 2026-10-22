@@ -25,6 +25,18 @@ export FABRIC_TEST_NETWORK=/absolute/path/to/fabric-samples/test-network
 # Optional: export MSP_ID=Org1MSP CHANNEL_NAME=dpp-prov-ver-channel CHAINCODE_NAME=dpp-prov-ver-chaincode
 ```
 
+### JWT authorization
+
+JWT Bearer authorization is implemented by `JwtAuthorizationFilter` and can be enabled or disabled using `authorization.enabled` in `application.properties`:
+
+```properties
+authorization.enabled=false
+```
+
+With the default `false` setting, the JWT authorization filter is bypassed (as in the local performance tests). Set `authorization.enabled=true` to require a valid `Authorization: Bearer <token>` header for protected endpoints. `POST /login` issues JWTs using demonstration credentials, while login and Swagger/OpenAPI documentation routes are exempt from the filter.
+
+This is a laboratory implementation: `LoginController` uses hard-coded demonstration credentials, and `JwtUtil` generates the signing key at application startup, so previously issued tokens are invalid after a restart. Before exposing the API outside a trusted environment, replace the demonstration credentials and transient signing key with appropriate credential and key management.
+
 The Gateway connection is opened lazily on the first blockchain request, so the server can
 start without a running Fabric network. The `GET /api/health` check does **not** test Fabric connectivity.
 The server reuses its Gateway and gRPC connection across requests rather than reconnecting on
@@ -107,8 +119,8 @@ decision**. These two outcomes are not interchangeable.
   or retry automatically**. Check transaction status first or use the operation-ID idempotency policy.
 
 These statuses are intended for subsequent JMeter/HTTP-client classification; no concurrency or
-performance results are claimed by this repository alone. Any bearer-token authentication must
-be implemented before exposing this API outside a trusted laboratory environment.
+performance results are claimed by this API module alone. The configurable JWT authorization
+implementation is intended for laboratory use, as described above.
 
 ## Temporal limitations
 
