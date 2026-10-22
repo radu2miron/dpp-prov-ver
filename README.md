@@ -6,7 +6,7 @@ DPP-Prov-Ver is a research prototype for maintaining consistent Digital Product 
 
 The repository is intended to accompany an academic study and to make its implementation, test scenarios, configuration, and experimental evidence reproducible.
 
-> **Project status:** The Java chaincode and functional CLI scenarios have been developed and tested on a local Fabric network. Consolidated concurrency benchmarks, the Spring Boot historical projection, and publication-ready raw performance datasets are being prepared. Only files actually committed to this repository should be treated as publicly available.
+> **Project status:** The Java chaincode, Spring Boot REST API, functional tests, concurrency tests, and performance workloads have been implemented and evaluated on a local Hyperledger Fabric test network. Test scripts and recorded experimental results are available in `tests/` and `results/`. The repository is a research prototype, not a production-ready DPP service.
 
 ## Research scope
 
@@ -28,10 +28,10 @@ The model uses persistent `Asset` identities, `LifecycleEvent` assertions, `Cont
 | Build | Maven |
 | Contract facade | `edu.tucn.dppprovver.contract.DppProvVerContract` |
 | Client API | Spring Boot / Fabric Gateway integration — **dpp-prov-ver-api** |
-| Functional testing | chaincode-only & end-to-end — **tests/functional** & **results/functiona** |
+| Functional testing | chaincode-only & end-to-end — **tests/functional** & **results/functional** |
 | Concurrency testing | end-to-end — **tests/concurrency** & **results/concurrency** |
 | Load testing | Apache JMeter — end-to-end — **tests/performance** & **results/performance** |
-| Historical projection | Commit-ordered index derived from Fabric block events |
+| Temporal reconstruction | On-chain effective-time queries with the latest accepted ledger view (`asOfPosition=0`) |
 
 The chaincode separates each entity's persistence service from the contract facade. The principal lifecycle entry point is `submitEvent()`. Implemented lifecycle processing covers `INSTALL`, `REMOVE`, `INSPECT`, `REPAIR`, `REUSE`, and the supported form of `CORRECT`; unsupported enum values should not be interpreted as implemented operations.
 
@@ -39,22 +39,22 @@ Conflict resolution is exposed through `resolveConflict()`. Currently supported 
 
 ## Repository layout
 
-The intended repository layout is shown below. Directories for the API, benchmark workloads, and datasets will be populated as those artifacts become available.
+The current repository layout is shown below.
 
 ```text
 dpp-prov-ver/
 ├── dpp-prov-ver-chaincode/     Java chaincode, Maven project, deployment instructions
-├── dpp-prov-ver-api/           Spring Boot API and historical projection (planned)
+├── dpp-prov-ver-api/           Spring Boot REST API and Fabric Gateway integration
 ├── tests/
 │   ├── functional/             CLI scenarios, expected outcomes, regression tests
-│   ├── concurrency/            Concurrent transaction and MVCC tests (planned)
-│   └── performance/            JMeter test plans (planned)
+│   ├── concurrency/            Concurrent transaction and MVCC tests
+│   └── performance/            JMeter test plans and Python orchestration
 ├── results/
 │   ├── functional/             Saved validation logs and summaries
-│   ├── concurrency/            Raw concurrency measurements (planned)
-│   └── performance/            JTL, CSV, and analysis outputs (planned)
-├── configs/                    Network and workload configurations
-├── docs/                       Data model, methodology, and diagrams
+│   ├── concurrency/            Recorded concurrency measurements
+│   └── performance/            JTL, CSV, and JSON experimental results
+├── CITATION.cff
+├── LICENSE
 └── README.md
 ```
 
@@ -66,7 +66,7 @@ dpp-prov-ver/
 - A Fabric test network configured with **CouchDB**
 - Bash on Linux (the provided CLI scenarios use Unix shell quoting)
 
-The chaincode Maven project declares `fabric-chaincode-shim` version `2.5.11`. The reference Fabric network used during development was based on Fabric `2.5.16`. Record the exact runtime versions when publishing a benchmark dataset.
+The chaincode Maven project declares `fabric-chaincode-shim` version `2.5.11`. The experimental Fabric network used version `2.5.16`; the associated study documents the broader experimental environment.
 
 ## Chaincode Build and Deployment
 
@@ -102,7 +102,7 @@ Run CLI scripts **in their documented order**, on a clean test dataset or with a
 - **Endorsement/contract error**: the invocation was rejected before a valid lifecycle decision was committed, typically for malformed input or an invalid operation.
 - **Invalid Fabric commit / MVCC conflict**: the transaction was not applied, even if endorsement initially succeeded; inspect commit status before counting it as success.
 
-When using Fabric CLI, prefer `peer chaincode query` for read-only operations and `peer chaincode invoke --waitForEvent` for state-changing operations. Manual test success is not a substitute for storing machine-readable evidence; the public results directory will distinguish test definitions from actual observed outputs.
+When using Fabric CLI, prefer `peer chaincode query` for read-only operations and `peer chaincode invoke --waitForEvent` for state-changing operations. Manual test success is not a substitute for machine-readable evidence; test definitions and recorded outcomes are stored separately under `tests/` and `results/`.
 
 ## Temporal queries and current limitations
 
@@ -115,32 +115,31 @@ Other prototype boundaries:
 - The prototype assumes a permissioned, trusted consortium. Fine-grained participant authorization is outside the chaincode research focus.
 - Physical identity claims and off-chain inspection evidence are not independently verified by the ledger.
 - Historical corrections currently cover a bounded set of temporal adjustments; they do not provide unrestricted replay of all possible lifecycle semantics.
-- The current prototype should not be represented as validated for high-throughput concurrent workloads until the dedicated tests have been executed and published.
+- The reported performance characterizes a local, single-host test network; it does not establish production-level throughput or scalability across distributed deployments.
 
 ## Experimental data and reproducibility
 
-The study is designed to compare **Baseline**, **Temporal-only**, **Causal-only**, and **Unified** configurations, subject to implementing and validating genuinely comparable configurations. Planned workloads include varying concurrency, semantic conflict rates, ledger sizes, and historical query patterns.
+The experimental evaluation covers the implemented **Unified** model. The recorded workloads include CREATE, UPDATE, and GET under sustained concurrent load; synchronized INSTALL bursts; effective-time historical reconstruction; same-slot and same-component contention; conflict rates of 5%, 10%, and 20%; and idempotent retransmissions. Separate Baseline, Temporal-only, and Causal-only implementations were not benchmarked.
 
-For each reported experiment, the accompanying results should include:
+For reproducibility and interpretation, the relevant experimental information includes:
 
-- the source-code release/tag and chaincode package version;
+- the evaluated source-code revision and chaincode package version;
 - exact Fabric, CouchDB, Java, operating system, and JMeter versions;
 - hardware and network topology, ordering parameters, and endorsement policies;
 - workload definitions, random seeds (where relevant), iteration counts, and warm-up conditions;
 - raw request/commit logs or JMeter `.jtl` files and processed `.csv` files;
-- scripts that regenerate the tables and figures, plus a manifest linking each result to its configuration.
+- the specific JMeter plan, runner parameters, fixtures, and run identifiers used to associate workloads with recorded results.
 
-**No benchmark result should be inferred from the presence of a test script.** Quantitative claims will be added only after the corresponding measurements and processing code have been deposited.
+**A test script alone is not evidence of a completed or successful experiment.** Consult the corresponding `.jtl`, `.csv`, and `.json` results; distinguish committed transactions from MVCC conflicts and endorsement failures when interpreting outcomes.
 
 ## Availability, archival, and citation
 
-The GitHub repository is intended for code, scripts, documentation, and working experimental artifacts. Once the evaluated version and supporting datasets are complete, a tagged release can be archived in **Zenodo**, which will provide a persistent DOI for the publication's Data Availability Statement.
+This GitHub repository provides the implementation, test scripts, and supporting experimental results for the associated research paper. **Please cite the research paper for the proposed model, methodology, and scientific findings.** The repository serves as reproducibility material.
 
 - **Repository URL:** https://github.com/radu2miron/dpp-prov-ver
-- **Archived release / DOI:** pending; do not cite a DOI until it has been issued.
-- **Associated paper:** details will be added when a citable publication is available.
+- **Associated paper:** bibliographic details and DOI will be added after publication.
 
-A `CITATION.cff` file and a software license will be added before public release. Until a license is selected, public visibility should not be taken to imply unrestricted reuse rights.
+The software is licensed under the [Apache License 2.0](LICENSE). The [citation metadata](CITATION.cff) directs readers to the associated research paper; its full citation will be added when the paper is published.
 
 ## Research context
 
