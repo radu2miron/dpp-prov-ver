@@ -81,6 +81,15 @@ please refer to the
 The guide includes network initialization, channel creation,
 chaincode installation, approval, commitment, and CLI testing.
 
+## Spring Boot REST API
+
+The Spring Boot REST API provides access to the Hyperledger Fabric
+chaincode through Fabric Gateway.
+
+For configuration, startup instructions, JWT authentication,
+available endpoints, and example requests, see the
+[Spring Boot API Guide](dpp-prov-ver-api/README.md).
+
 ## Functional testing
 
 Functional scenarios are organized by model feature:
