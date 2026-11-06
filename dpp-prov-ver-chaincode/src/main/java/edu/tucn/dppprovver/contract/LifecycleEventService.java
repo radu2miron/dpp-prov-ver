@@ -69,15 +69,39 @@ public class LifecycleEventService extends AbstractLedgerService<LifecycleEvent>
      * @return the decision, serialized as JSON
      */
     public String submitEvent(Context ctx, String json) {
+        return submitEventInternal(ctx, json, false);
+    }
+
+    /**
+     * Controlled INSTALL-only ablation for performance experiments.
+     * Keeps idempotency, temporal/structural checks, Fabric MVCC guard keys,
+     * and acceptance decisions; omits causal clocks and semantic frontiers.
+     * Use on an isolated benchmark ledger, never mixed with Unified traffic.
+     */
+    public String submitEventBaseline(Context ctx, String json) {
+        return submitEventInternal(ctx, json, true);
+    }
+
+    private String submitEventInternal(Context ctx, String json, boolean baseline) {
         LifecycleEvent event = JsonMapper.fromJson(json, LifecycleEvent.class);
         checkDocument(event);
+        if (baseline) {
+            if (event.getType() != LifecycleEventType.INSTALL) {
+                throw new IllegalArgumentException("Baseline supports INSTALL only.");
+            }
+            if ((event.getParentEventIds() != null && !event.getParentEventIds().isEmpty())
+                    || (event.getVectorClock() != null && !event.getVectorClock().isEmpty())) {
+                throw new IllegalArgumentException(
+                        "Baseline requires empty parentEventIds and vectorClock.");
+            }
+        }
         String operationKey = "OPERATION_ID:" + keyPart(event.getOperationId());
 
         String previousId = ctx.getStub().getStringState(operationKey);
         if (present(previousId)) {
             LifecycleEvent previous = read(ctx, previousId);
             // Automatically assigned clocks must not break retries of identical input.
-            if (event.getVectorClock() == null || event.getVectorClock().isEmpty()) {
+            if (!baseline && (event.getVectorClock() == null || event.getVectorClock().isEmpty())) {
                 event.setVectorClock(previous.getVectorClock());
             }
             if (!JsonMapper.toJson(previous).equals(JsonMapper.toJson(event))) {
@@ -95,10 +119,13 @@ public class LifecycleEventService extends AbstractLedgerService<LifecycleEvent>
             throw new IllegalArgumentException("Unsupported lifecycle event type: " + event.getType());
         }
         validateReferences(ctx, event);
-        causalVersionService.prepare(ctx, event);
-        SemanticConflictService.Analysis analysis = semanticConflictService.analyze(ctx, event);
+        SemanticConflictService.Analysis analysis = null;
+        if (!baseline) {
+            causalVersionService.prepare(ctx, event);
+            analysis = semanticConflictService.analyze(ctx, event);
+        }
         AcceptanceDecision decision;
-        if (!analysis.conflictingIds().isEmpty()) {
+        if (!baseline && !analysis.conflictingIds().isEmpty()) {
             semanticConflictService.recordConflict(ctx, event, analysis);
             decision = rejected(event, "Incompatible concurrent lifecycle event(s): "
                     + String.join(", ", analysis.conflictingIds()));
@@ -129,9 +156,11 @@ public class LifecycleEventService extends AbstractLedgerService<LifecycleEvent>
             temporalProvenanceService.recordCorrection(ctx, event);
         }
         ctx.getStub().putStringState(operationKey, event.getId());
-        causalVersionService.record(ctx, event);
-        if (decision.getOutcome() == EventStatus.ACCEPTED) {
-            semanticConflictService.recordAccepted(ctx, event, analysis);
+        if (!baseline) {
+            causalVersionService.record(ctx, event);
+            if (decision.getOutcome() == EventStatus.ACCEPTED) {
+                semanticConflictService.recordAccepted(ctx, event, analysis);
+            }
         }
         // Consumers must process only VALID transactions in committed Fabric blocks.
         Map<String, Object> notification = new LinkedHashMap<>();

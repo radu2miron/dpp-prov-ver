@@ -114,6 +114,12 @@ public class DppProvVerContract implements ContractInterface {
         return lifecycleEventService.submitEvent(ctx, json);
     }
 
+    /** Experimental INSTALL-only ablation (causal checks disabled); use on a separate test ledger. */
+    @Transaction(intent = Transaction.TYPE.SUBMIT)
+    public String submitEventBaseline(Context ctx, String json) {
+        return lifecycleEventService.submitEventBaseline(ctx, json);
+    }
+
     /** Reads the latest accepted containment state at effective time (asOfPosition must be "0"). */
     @Transaction(intent = Transaction.TYPE.EVALUATE)
     public String reconstructState(Context ctx, String dppId, String effectiveTime,

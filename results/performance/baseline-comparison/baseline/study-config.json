@@ -1,0 +1,13 @@
+{
+  "study": "INSTALL causal-ablation baseline, synchronized single burst",
+  "mode": "baseline",
+  "threads": [
+    100,
+    200
+  ],
+  "repetitions": 3,
+  "ramp_up_s": 1,
+  "base_url": "http://localhost:8081",
+  "prep_workers": 4,
+  "routing_check": "committed LifecycleEvent vectorClock"
+}
