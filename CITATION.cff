@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use the methods or implementation presented in this repository, please cite the associated research paper once published."
+message: "If you use the methods or implementation in this repository, please cite the associated journal article."
 type: software
 title: "DPP-Prov-Ver: Temporal Provenance, Causal Versioning, and Conflict Resolution for Digital Product Passports"
 authors:
@@ -19,3 +19,22 @@ keywords:
   - conflict resolution
   - blockchain
 license: Apache-2.0
+repository-code: "https://github.com/radu2miron/dpp-prov-ver"
+
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Miron
+      given-names: Radu
+    - family-names: Hulea
+      given-names: Mihai
+    - family-names: Mureșan
+      given-names: Vlad
+  title: "An Integrated Model for Temporal Provenance, Causal Versioning, and Conflict Resolution in Distributed Digital Product Passports"
+  journal: "Technologies"
+  year: 2026
+  month: 11
+  volume: 14
+  issue: 11
+  doi: "10.3390/technologies14110753"
+  url: "https://www.mdpi.com/2227-7080/14/11/753"
