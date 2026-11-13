@@ -146,7 +146,7 @@ For reproducibility and interpretation, the relevant experimental information in
 This GitHub repository provides the implementation, test scripts, and supporting experimental results for the associated research paper. **Please cite the research paper for the proposed model, methodology, and scientific findings.** The repository serves as reproducibility material.
 
 - **Repository URL:** https://github.com/radu2miron/dpp-prov-ver
-- **Associated paper:** bibliographic details and DOI will be added after publication.
+- **Associated paper:** https://www.mdpi.com/2227-7080/14/11/753
 
 The software is licensed under the [Apache License 2.0](LICENSE). The [citation metadata](CITATION.cff) directs readers to the associated research paper; its full citation will be added when the paper is published.
 
