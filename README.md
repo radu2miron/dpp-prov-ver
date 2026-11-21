@@ -149,6 +149,7 @@ This GitHub repository provides the implementation, test scripts, and supporting
 - **Associated paper:** https://www.mdpi.com/2227-7080/14/11/753
 
 Miron, R.; Hulea, M.; Mureșan, V. An Integrated Model for Temporal Provenance, Causal Versioning, and Conflict Resolution in Distributed Digital Product Passports. *Technologies* **2026**, *14*(11), 753.
+
 **DOI:** https://doi.org/10.3390/technologies14110753
 
 The software is licensed under the [Apache License 2.0](LICENSE). The [citation metadata](CITATION.cff) directs readers to the associated research paper.
