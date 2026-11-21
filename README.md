@@ -148,8 +148,10 @@ This GitHub repository provides the implementation, test scripts, and supporting
 - **Repository URL:** https://github.com/radu2miron/dpp-prov-ver
 - **Associated paper:** https://www.mdpi.com/2227-7080/14/11/753
 
-The software is licensed under the [Apache License 2.0](LICENSE). The [citation metadata](CITATION.cff) directs readers to the associated research paper; its full citation will be added when the paper is published.
+Miron, R.; Hulea, M.; Mureșan, V. An Integrated Model for Temporal Provenance, Causal Versioning, and Conflict Resolution in Distributed Digital Product Passports. *Technologies* **2026**, *14*(11), 753.
+**DOI:** https://doi.org/10.3390/technologies14110753
 
+The software is licensed under the [Apache License 2.0](LICENSE). The [citation metadata](CITATION.cff) directs readers to the associated research paper.
 ## Research context
 
 Developed as an academic research prototype at the **Technical University of Cluj-Napoca**, Romania. The project focuses on lifecycle consistency and reproducible evaluation rather than production-ready identity management, storage governance, or user-facing applications.
